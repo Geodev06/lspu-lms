@@ -57,8 +57,15 @@
                 <div data-i18n="Account Settings">System Administration</div>
             </a>
             <ul class="menu-sub">
+
+            <li class="menu-item">
+                    <a href="{{ route('sections') }}" class="menu-link">
+                        <div data-i18n="Account">Param Sections</div>
+                    </a>
+                </li>
+
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('organizations') }}" class="menu-link">
                         <div data-i18n="Account">Organizations</div>
                     </a>
                 </li>

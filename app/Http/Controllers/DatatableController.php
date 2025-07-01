@@ -55,14 +55,13 @@ class DatatableController extends Controller
                         $user->name_ext = decrypt($row->name_ext);
 
 
-                        $edit = route('user_form', encrypt($row->id));
-
-
+                        $edit = route('user_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
+                        $view = route('user_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_VIEW)]);
 
                         return "
                             <div class='demo-inline-spacing text-center'>
-                                <a type='button' class='btn btn-icon btn-primary'  
-                                @click=''>
+                                <a type='button' class='btn btn-icon btn-primary' href='$view' 
+                                >
                                     <span class='tf-icons text-white bx bx-file'></span>
                                 </a>
                                 <a type='button' class='btn btn-icon btn-info' href='$edit'>
@@ -73,6 +72,90 @@ class DatatableController extends Controller
                     })
 
                     ->rawColumns(['control_no',  'status', 'actions', 'org', 'name', 'section', 'email'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+    public function table_organizations(Request $request)
+    {
+
+        try {
+
+
+            $user = Auth::user();
+
+            if ($request->ajax()) {
+
+
+                $query = ParamOrganization::orderBy('id','desc')->get();
+
+
+                return DataTables::of($query)
+                  
+                    ->addColumn('actions', function ($row) {
+
+                        $edit = route('organization_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
+                        $view = route('organization_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_VIEW)]);
+
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                                <a type='button' class='btn btn-icon btn-primary' href='$view' 
+                                >
+                                    <span class='tf-icons text-white bx bx-file'></span>
+                                </a>
+                                <a type='button' class='btn btn-icon btn-info' href='$edit'>
+                                    <span class='tf-icons bx bx-pencil'></span>
+                                </a>
+                            </div>
+                        ";
+                    })
+
+                    ->rawColumns(['org_code',  'name', 'department', 'actions'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+    public function table_sections(Request $request)
+    {
+
+        try {
+
+
+            $user = Auth::user();
+
+            if ($request->ajax()) {
+
+
+                $query = ParamSection::orderBy('id','desc')->get();
+
+
+                return DataTables::of($query)
+                  
+                    ->addColumn('actions', function ($row) {
+
+                        $edit = route('section_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
+                        $view = route('section_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_VIEW)]);
+
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                                <a type='button' class='btn btn-icon btn-primary' href='$view' 
+                                >
+                                    <span class='tf-icons text-white bx bx-file'></span>
+                                </a>
+                                <a type='button' class='btn btn-icon btn-info' href='$edit'>
+                                    <span class='tf-icons bx bx-pencil'></span>
+                                </a>
+                            </div>
+                        ";
+                    })
+
+                    ->rawColumns(['org_code',  'section_name', 'school_year', 'actions'])
                     ->make(true);
             }
         } catch (\Throwable $th) {

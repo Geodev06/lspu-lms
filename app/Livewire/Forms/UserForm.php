@@ -21,6 +21,8 @@ class UserForm extends Component
     use WithFileUploads;
 
     public $id;
+    public $action;
+
     public $user;
 
     public $control_no;
@@ -47,10 +49,12 @@ class UserForm extends Component
 
 
 
-    public function mount($id = null)
+    public function mount($id = null, $action = null)
     {
         if ($id) {
             $this->id = decrypt($id);
+            $this->action = decrypt($action);
+
 
             $this->user = User::find($this->id);
 
@@ -98,17 +102,17 @@ class UserForm extends Component
             'email' => [
                 'required',
                 'email',
-                Rule::unique('users')->ignore($this->user->id),
+                Rule::unique('users')->ignore($this->id),
             ],
             'control_no' => [
                 'required',
                 'string',
                 'max:15',
-                Rule::unique('users')->ignore($this->user->id),
+                Rule::unique('users')->ignore($this->id),
             ],
 
             'password' => 'nullable|string|min:6',
-            'profile' => 'nullable'
+            'profile' => 'nullable|image|max:5120',
         ]);
 
         try {
@@ -134,8 +138,10 @@ class UserForm extends Component
                 'active_flag' => $this->active_status,
                 'email'       => $this->email,
                 'control_no'  => $this->control_no,
+                'password'    => Hash::make('Default@123')
             ];
 
+            
             if ($this->id) {
                 if ($this->password) {
                     $data['password'] = Hash::make($this->password);
@@ -149,7 +155,16 @@ class UserForm extends Component
                 session()->flash('success', $this->email . ' has been successfully updated.');
                 $this->redirect(route('users'), 1);
             } else {
+                
+
+                if(is_null($this->password))
+                {
+                    $this->password = 'Default@123';
+                }
+
+                
                 $data['password'] = Hash::make($this->password);
+
                 if ($filename !== null) {
                     $data['profile'] = 'uploads/profile/' . $filename;
                 }

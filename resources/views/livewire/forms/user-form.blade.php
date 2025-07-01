@@ -28,13 +28,25 @@
                                         <span class="tf-icons bx bx-left-arrow-circle"></span> Back
                                     </a>
                                 </div>
+
+                                @if($action == ACTION_EDIT OR $action == null)
                                 <div class="card-body">
                                     <h2>User Form</h2>
                                     <form id="formAuthentication" class="mb-3 row" method="POST">
 
+                                        <div class="col-lg-12 mb-2">
+                                            <img src="{{ asset($this->profile) }}" alt="" class="mb-2" srcset="" style="max-height: 150px; max-width: 150px;">
+                                        </div>
                                         <div class="col-lg-4 mb-2">
+
                                             <div class="mb-3">
-                                                <label for="formFile" class="form-label">Profile Picture</label>
+
+                                                <div class="d-flex justify-content-between">
+                                                    <label for="email" class="form-label">Profile</label>
+                                                    @error('profile')
+                                                    <label for="" class="form-label text-danger form-error">{{ $message }}</label>
+                                                    @enderror
+                                                </div>
                                                 <input class="form-control" type="file" wire:model="profile" id="formFile">
                                             </div>
                                         </div>
@@ -184,6 +196,8 @@
                                                     <option value="">Select One</option>
                                                     <option value="{{ ROLE_STUDENT }}">Student</option>
                                                     <option value="{{ ROLE_TEACHER }}">Teacher</option>
+                                                    <option value="{{ ROLE_ADMIN }}">Administrator</option>
+
                                                 </select>
                                             </div>
                                         </div>
@@ -233,7 +247,7 @@
                                                         <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                                         @enderror
                                                     </div>
-                                                    
+
                                                 </div>
                                                 <div class="input-group input-group-merge">
                                                     <input wire:model="password" type="password" id="password" class="form-control" name="password" placeholder="············" aria-describedby="password">
@@ -260,6 +274,78 @@
                                         </div>
                                     </form>
                                 </div>
+                                @elseif($action == ACTION_VIEW)
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-lg-6 mx-auto">
+                                            <div class="row">
+
+                                                <div class="col-lg-12 text-center mb-3">
+                                                    @if($profile)
+                                                    <img src="{{ asset($profile) }}" alt="" srcset="" height="150" width="150">
+                                                    @else
+                                                    <img src="{{ asset('img/user.png') }}" alt="" srcset="" height="150" width="150">
+
+                                                    @endif
+                                                </div>
+                                                <hr>
+                                                <div class="col-lg-3 mb-2">
+                                                    <p class="m-0">First Name</p>
+                                                    <b>{{ $first_name }}</b>
+                                                </div>
+
+                                                <div class="col-lg-3 mb-2">
+                                                    <p class="m-0">Middle Name</p>
+                                                    <b>{{ $middle_name }}</b>
+                                                </div>
+
+                                                <div class="col-lg-3 mb-2">
+                                                    <p class="m-0">Last Name</p>
+                                                    <b>{{ $last_name }}</b>
+                                                </div>
+
+                                                <div class="col-lg-3 mb-2">
+                                                    <p class="m-0">Ext Name</p>
+                                                    <b>{{ $name_ext ?? 'N/A' }}</b>
+                                                </div>
+
+                                                <hr>
+
+                                                <div class="col-lg-12 mb-2">
+                                                    <p class="m-0">Sex</p>
+                                                    <b>{{ $sex == 'M' ? 'Male' : 'Female' }}</b>
+                                                </div>
+
+                                                <div class="col-lg-6 mb-2">
+                                                    <p class="m-0">Organization Code</p>
+                                                    <b>{{ get_org_name($course) }}</b>
+                                                </div>
+
+                                                <div class="col-lg-6 mb-2">
+                                                    <p class="m-0">Section</p>
+                                                    <b>{{ get_section_name($section) }}</b>
+                                                </div>
+
+                                                <div class="col-lg-6 mb-2">
+                                                    <p class="m-0">Role</p>
+                                                    <b>{{ get_role($role) }}</b>
+                                                </div>
+                                                <hr>
+
+                                                <div class="col-lg-6 mb-2">
+                                                    <p class="m-0">Email</p>
+                                                    <b>{{ $email }}</b>
+                                                </div>
+
+                                                <div class="col-lg-6 mb-2">
+                                                    <p class="m-0">Student/Teacher ID</p>
+                                                    <b>{{ $control_no }}</b>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                @endif
                             </div>
                         </div>
 
