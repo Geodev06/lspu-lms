@@ -24,10 +24,10 @@
     <link rel="stylesheet" href="{{ asset('vendor/css/theme-default.css') }}" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="{{ asset('css/demo.css') }}" />
 
-    
 
-    <script  src="{{ asset('vendor/libs/jquery/jquery.js') }}"></script>
-  
+
+    <script src="{{ asset('vendor/libs/jquery/jquery.js') }}"></script>
+
 
     <script src="{{ asset('vendor/js/helpers.js') }}"></script>
     <script src="{{ asset('js/config.js') }}"></script>
@@ -37,7 +37,7 @@
     <link data-navigate-once href="https://cdn.datatables.net/responsive/3.0.4/css/responsive.bootstrap5.min.css" rel="stylesheet" integrity="sha384-seyUnB//1QOFEqox9uI7YTLBgz9jBwFRqZvsEPFrTw6NAsFEo70nhBWsQfODqiYA" crossorigin="anonymous">
     <link data-navigate-once href="https://cdn.datatables.net/searchbuilder/1.8.2/css/searchBuilder.bootstrap5.min.css" rel="stylesheet" integrity="sha384-c+17EpI1t/ZAjBoElPoW3nsmP/5974nO3qiFjdyE/JLy0pDYToN1xM+cdrRNTcab" crossorigin="anonymous">
     <link data-navigate-once href="https://cdn.datatables.net/searchpanes/2.3.3/css/searchPanes.bootstrap5.min.css" rel="stylesheet" integrity="sha384-kCfL8qIiEo0PgaMnJvqVlxd797OkgozSx5pxn/uCJOY5d99ovqdqU545WcRTbo+m" crossorigin="anonymous">
-    
+
     <script data-navigate-once src="https://code.jquery.com/jquery-3.7.0.min.js" integrity="sha384-NXgwF8Kv9SSAr+jemKKcbvQsz+teULH/a5UNJvZc6kP47hZgl62M1vGnw6gHQhb1" crossorigin="anonymous"></script>
     <script data-navigate-once src="https://cdn.datatables.net/2.3.2/js/dataTables.min.js" integrity="sha384-RZEqG156bBQSxYY9lwjUz/nKVkqYj/QNK9dEjjyJ/EVTO7ndWwk6ZWEkvaKdRm/U" crossorigin="anonymous"></script>
     <script data-navigate-once src="https://cdn.datatables.net/2.3.2/js/dataTables.bootstrap5.min.js" integrity="sha384-G85lmdZCo2WkHaZ8U1ZceHekzKcg37sFrs4St2+u/r2UtfvSDQmQrkMsEx4Cgv/W" crossorigin="anonymous"></script>
@@ -57,7 +57,29 @@
 
 <body>
 
-    {{ $slot }}
+    <div class="layout-wrapper layout-content-navbar">
+        <div class="layout-container">
+
+            <livewire:base.aside />
+            <!-- / Menu -->
+
+            <!-- Layout container -->
+            <div class="layout-page">
+                <!-- Navbar -->
+
+                <livewire:base.nav />
+
+                <!-- / Navbar -->
+
+                <!-- Content wrapper -->
+                {{ $slot }}
+                <!-- Content wrapper -->
+            </div>
+            <!-- / Layout page -->
+        </div>
+
+        <!-- Overlay -->
+    </div>
 
     <!-- Core JS -->
     <script src="{{ asset('vendor/libs/popper/popper.js') }}"></script>

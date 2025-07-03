@@ -22,6 +22,9 @@
 <link rel="stylesheet" href="{{ asset('vendor/libs/perfect-scrollbar/perfect-scrollbar.css') }}" />
 
 <!-- Page CSS -->
+
+
+
 <!-- Page -->
 <link rel="stylesheet" href="{{ asset('vendor/css/pages/page-auth.css') }}" />
 <!-- Helpers -->

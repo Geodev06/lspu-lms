@@ -35,7 +35,7 @@
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('manage_learning_course') }}" class="menu-link">
                         <div data-i18n="Account">Courses</div>
                     </a>
                 </li>

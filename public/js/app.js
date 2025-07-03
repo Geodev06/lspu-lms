@@ -19,4 +19,7 @@ function init_datatable(selector, route, columns) {
     });
 }
 
-
+  document.querySelectorAll('a').forEach(el => {
+    el.setAttribute('data-bs-toggle', 'tooltip');
+    el.setAttribute('title', el.getAttribute('title') || 'Click here'); // Default title if not set
+});

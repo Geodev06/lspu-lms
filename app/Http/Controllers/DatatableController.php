@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ParamLearningCourse;
+use App\Models\ParamLearningCourseModule;
 use App\Models\ParamOrganization;
 use App\Models\ParamSection;
 use App\Models\User;
@@ -23,7 +25,7 @@ class DatatableController extends Controller
             if ($request->ajax()) {
 
 
-                $query = User::orderBy('created_at','desc')->get();
+                $query = User::orderBy('created_at', 'desc')->get();
 
 
                 return DataTables::of($query)
@@ -90,11 +92,11 @@ class DatatableController extends Controller
             if ($request->ajax()) {
 
 
-                $query = ParamOrganization::orderBy('id','desc')->get();
+                $query = ParamOrganization::orderBy('id', 'desc')->get();
 
 
                 return DataTables::of($query)
-                  
+
                     ->addColumn('actions', function ($row) {
 
                         $edit = route('organization_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
@@ -132,11 +134,11 @@ class DatatableController extends Controller
             if ($request->ajax()) {
 
 
-                $query = ParamSection::orderBy('id','desc')->get();
+                $query = ParamSection::orderBy('id', 'desc')->get();
 
 
                 return DataTables::of($query)
-                  
+
                     ->addColumn('actions', function ($row) {
 
                         $edit = route('section_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
@@ -156,6 +158,99 @@ class DatatableController extends Controller
                     })
 
                     ->rawColumns(['org_code',  'section_name', 'school_year', 'actions'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+    public function table_learning_courses(Request $request)
+    {
+
+        try {
+
+
+            $user = Auth::user();
+
+            if ($request->ajax()) {
+
+
+                $query = ParamLearningCourse::where('created_by', $user->id)->orderBy('id', 'desc')->get();
+
+
+                return DataTables::of($query)
+                    ->addColumn('active_flag', function ($row) {
+                        return $row->active_flag == 'Y' ? 'Active' : 'Inactive';
+                    })
+                    ->addColumn('actions', function ($row) {
+
+                        $edit = route('learning_course_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
+                        $view = route('learning_course_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_VIEW)]);
+                        $manage = route('learning_course_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_MANAGE)]);
+
+
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                                <a type='button' class='btn btn-icon btn-primary' href='$view' 
+                                >
+                                    <span class='tf-icons text-white bx bx-file'></span>
+                                </a>
+                                <a type='button' class='btn btn-icon btn-info' href='$edit'>
+                                    <span class='tf-icons bx bx-pencil'></span>
+                                </a>
+                                <a type='button' class='btn btn-icon btn-dark' href='$manage'>
+                                    <span class='tf-icons bx bx-folder'></span>
+                                </a>
+                            </div>
+                        ";
+                    })
+
+                    ->rawColumns(['course_code',  'title', 'org_code', 'actions', 'active_flag'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+    public function table_learning_modules($course_id, Request $request)
+    {
+
+        try {
+
+
+            $course_id = decrypt($course_id);
+
+            $user = Auth::user();
+
+            if ($request->ajax()) {
+
+
+                $query = ParamLearningCourseModule::where('learning_course_id', $course_id)->orderBy('id', 'desc')->get();
+
+
+                return DataTables::of($query)
+
+                    ->addColumn('actions', function ($row) {
+
+                        $edit = route('learning_module_form', ['course_id' => encrypt($row->learning_course_id), 'module_id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
+                        $view = route('learning_module_form', ['course_id' => encrypt($row->learning_course_id), 'module_id' => encrypt($row->id), 'action' => encrypt(ACTION_VIEW)]);
+
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                                <a type='button' class='btn btn-icon btn-primary' href='$view' 
+                                >
+                                    <span class='tf-icons text-white bx bx-file'></span>
+                                </a>
+                                <a type='button' class='btn btn-icon btn-info' href='$edit'>
+                                    <span class='tf-icons bx bx-pencil'></span>
+                                </a>
+                            </div>
+                        ";
+                    })
+
+                    ->rawColumns(['title', 'actions'])
                     ->make(true);
             }
         } catch (\Throwable $th) {
