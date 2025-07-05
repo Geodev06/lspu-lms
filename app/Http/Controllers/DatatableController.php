@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ParamLearningCourse;
 use App\Models\ParamLearningCourseModule;
+use App\Models\ParamModuleAttachment;
 use App\Models\ParamOrganization;
 use App\Models\ParamSection;
 use App\Models\User;
@@ -193,13 +194,23 @@ class DatatableController extends Controller
                         return "
                             <div class='demo-inline-spacing text-center'>
                                 <a type='button' class='btn btn-icon btn-primary' href='$view' 
+                                    data-bs-toggle='tooltip' 
+                                    data-bs-placement='top'
+                                    title='View'
                                 >
                                     <span class='tf-icons text-white bx bx-file'></span>
                                 </a>
-                                <a type='button' class='btn btn-icon btn-info' href='$edit'>
+                                <a type='button' class='btn btn-icon btn-info' href='$edit' data-bs-toggle='tooltip' 
+                                    data-bs-placement='top'
+                                    title='Edit'
+                                    >
                                     <span class='tf-icons bx bx-pencil'></span>
                                 </a>
-                                <a type='button' class='btn btn-icon btn-dark' href='$manage'>
+                                <a type='button' class='btn btn-icon btn-dark' href='$manage' 
+                                data-bs-toggle='tooltip' 
+                                    data-bs-placement='top'
+                                    title='Manage'
+                                    >
                                     <span class='tf-icons bx bx-folder'></span>
                                 </a>
                             </div>
@@ -236,21 +247,92 @@ class DatatableController extends Controller
 
                         $edit = route('learning_module_form', ['course_id' => encrypt($row->learning_course_id), 'module_id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
                         $view = route('learning_module_form', ['course_id' => encrypt($row->learning_course_id), 'module_id' => encrypt($row->id), 'action' => encrypt(ACTION_VIEW)]);
+                        $manage = route('learning_module_form', ['course_id' => encrypt($row->learning_course_id), 'module_id' => encrypt($row->id), 'action' => encrypt(ACTION_MANAGE)]);
 
                         return "
                             <div class='demo-inline-spacing text-center'>
-                                <a type='button' class='btn btn-icon btn-primary' href='$view' 
+                                <a type='button' class='btn btn-icon btn-primary' href='$view'
+                                data-bs-toggle='tooltip' 
+                                    data-bs-placement='top'
+                                    title='View'
                                 >
                                     <span class='tf-icons text-white bx bx-file'></span>
                                 </a>
-                                <a type='button' class='btn btn-icon btn-info' href='$edit'>
+                                <a type='button' class='btn btn-icon btn-info' 
+                                data-bs-toggle='tooltip' 
+                                    data-bs-placement='top'
+                                    title='Edit'
+                                     href='$edit'>
                                     <span class='tf-icons bx bx-pencil'></span>
+                                </a>
+                                <a type='button' class='btn btn-icon btn-dark'
+                                    data-bs-toggle='tooltip' 
+                                    data-bs-placement='top'
+                                    title='Manage'
+                                        href='$manage'>
+                                    <span class='tf-icons bx bx-folder'></span>
                                 </a>
                             </div>
                         ";
                     })
 
                     ->rawColumns(['title', 'actions'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+    public function table_module_attachments($module_id, Request $request)
+    {
+
+        try {
+
+
+            $module_id = decrypt($module_id);
+
+            $user = Auth::user();
+
+            if ($request->ajax()) {
+
+
+                $query = ParamModuleAttachment::where('module_id', $module_id)->orderBy('id', 'desc')->get();
+
+
+                return DataTables::of($query)
+
+                    ->editColumn('created_at', fn($row) => \Carbon\Carbon::parse($row->created_at)->format('Y-m-d'))
+
+                    ->addColumn('actions', function ($row) {
+
+                        $module = ParamLearningCourseModule::find($row->module_id);
+
+                        $edit = route('learning_module_doc_form', ['course_id' => encrypt($module->learning_course_id), 'module_id' => encrypt($module->id), 'attachment_id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
+                        $view = route('learning_module_doc_form', ['course_id' => encrypt($module->learning_course_id), 'module_id' => encrypt($module->id), 'attachment_id' => encrypt($row->id), 'action' => encrypt(ACTION_VIEW)]);
+
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                                <a type='button' class='btn btn-icon btn-primary' href='$view'
+                                data-bs-toggle='tooltip' 
+                                    data-bs-placement='top'
+                                    title='View'
+                                >
+                                    <span class='tf-icons text-white bx bx-file'></span>
+                                </a>
+                                <a type='button' class='btn btn-icon btn-info' 
+                                data-bs-toggle='tooltip' 
+                                    data-bs-placement='top'
+                                    title='Edit'
+                                     href='$edit'>
+                                    <span class='tf-icons bx bx-pencil'></span>
+                                </a>
+                               
+                            </div>
+                        ";
+                    })
+
+                    ->rawColumns(['file_name', 'category', 'created_at', 'actions'])
                     ->make(true);
             }
         } catch (\Throwable $th) {

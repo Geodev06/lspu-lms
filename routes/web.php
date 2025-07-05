@@ -5,6 +5,7 @@ use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Forms\LearningCourseForm;
 use App\Livewire\Forms\LearningModuleForm;
+use App\Livewire\Forms\ModuleAttachmentForm;
 use App\Livewire\Forms\OrganizationForm;
 use App\Livewire\Forms\SectionForm;
 use App\Livewire\Forms\UserForm;
@@ -40,9 +41,9 @@ Route::middleware(['auth', 'cfs'])->group(function () {
 
 
     // System admin
-    Route::get('/system-administration/users', Users::class)->name('users');
-    Route::get('/system-administration/organizations', Organizations::class)->name('organizations');
-    Route::get('/system-administration/sections', Sections::class)->name('sections');
+    Route::get('/system-administration/users', Users::class)->middleware('ar')->name('users');
+    Route::get('/system-administration/organizations', Organizations::class)->middleware('ar')->name('organizations');
+    Route::get('/system-administration/sections', Sections::class)->middleware('ar')->name('sections');
 });
 
 Route::get('/take-survey', Survey::class)->name('survey');
@@ -53,13 +54,14 @@ Route::middleware(['auth', 'cfs'])->group(function () {
 
     Route::get('/manage/learning-course/form/{id?}/{action?}', LearningCourseForm::class)->name('learning_course_form');
     Route::get('/manage/learning-module/form/{course_id?}/{module_id?}/{action?}', LearningModuleForm::class)->name('learning_module_form');
+    Route::get('/manage/learning-module/learning_module_doc_form/form/{course_id?}/{module_id?}/{attachment_id?}/{action?}', ModuleAttachmentForm::class)->name('learning_module_doc_form');
 
 
     // System admin
-    Route::get('/system-administration/section/form/{id?}/{action?}', SectionForm::class)->name('section_form');
-    Route::get('/system-administration/users/form/{id?}/{action?}', UserForm::class)->name('user_form');
-    Route::get('/system-administration/organization/form/{id?}/{action?}', OrganizationForm::class)->name('organization_form');
-    Route::get('/system-administration/section/form/{id?}/{action?}', SectionForm::class)->name('section_form');
+    Route::get('/system-administration/section/form/{id?}/{action?}', SectionForm::class)->middleware('ar')->name('section_form');
+    Route::get('/system-administration/users/form/{id?}/{action?}', UserForm::class)->middleware('ar')->name('user_form');
+    Route::get('/system-administration/organization/form/{id?}/{action?}', OrganizationForm::class)->middleware('ar')->name('organization_form');
+    Route::get('/system-administration/section/form/{id?}/{action?}', SectionForm::class)->middleware('ar')->name('section_form');
     
 });
 
@@ -72,6 +74,8 @@ Route::controller(DatatableController::class)
 
         Route::get('/table_learning_courses', 'table_learning_courses')->name('learning_courses');
         Route::get('/table_learning_modules/{course_id}', 'table_learning_modules')->name('learning_modules');
+        Route::get('/table_module_attachments/{module_id}', 'table_module_attachments')->name('module_attachments');
+
 
 
     });

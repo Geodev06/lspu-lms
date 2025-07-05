@@ -21,3 +21,16 @@ define('MODALITY_READING_WRITING', 'R');
 define('MODALITY_AUDITORY', 'A');
 define('MODALITY_KINESTHETIC', 'K');
 define('MODALITY_VISUAL', 'V');
+
+
+define('F_PDF', 'PDF');
+define('F_IMAGE', 'IMAGE');
+define('F_VIDEO', 'VIDEO');
+define('F_AUDIO', 'AUDIO');
+define('F_LINK', 'LINK');
+
+
+
+
+
+

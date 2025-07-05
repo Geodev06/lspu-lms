@@ -30,7 +30,7 @@
                         <form id="formAuthentication" class="mb-3 row" method="POST">
 
 
-                         
+
                             <div class="col-lg-12 mx-auto mb-3">
                                 <div class="row bg-dark p-3">
 
@@ -136,6 +136,104 @@
                                 </div>
                             </div>
                         </div>
+                    </div>
+
+                    @elseif($action == ACTION_MANAGE)
+                    <div class="card-body">
+                        <h2>Module Documents</h2>
+                        <form id="formAuthentication" class="mb-3 row" method="POST">
+
+
+
+                            <div class="col-lg-12 mx-auto mb-3">
+                                <div class="row bg-dark p-3">
+
+                                    <div class="col-lg-2 mb-2">
+                                        <p class="m-0 text-muted">Course Code</p>
+                                        <b class="text-white">{{ $course_code }}</b>
+                                    </div>
+
+                                    <div class="col-lg-2 mb-2">
+                                        <p class="m-0 text-muted">Title</p>
+                                        <b class="text-white">{{ $course_title }}</b>
+                                    </div>
+
+                                    <div class="col-lg-8 mb-2">
+                                        <p class="m-0 text-muted">For Department</p>
+                                        <b class="text-white">{{ get_org_name($course_org_code) }}</b>
+                                    </div>
+
+                                    <div class="col-lg-8 mb-2">
+                                        <p class="m-0 text-muted">Module</p>
+                                        <b class="text-white">{{ get_module_name($module_id) }}</b>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+
+                            <div class="col-lg-12 mb-3">
+                                <a href="{{ route('learning_module_doc_form', [encrypt($course_id), encrypt($module_id), null , null]) }}" class="btn rounded-pill float-end btn-success text-white">
+                                    <span class="tf-icons bx bx-plus"></span> Add Attachment
+                                </a>
+                            </div>
+
+                            <div class="col-lg-12 mb-3">
+                                <div class="col-lg-12 mb-2">
+                                    @if(session('success'))
+                                    <x-message-alert type="success" message="{{ session('success') }}" />
+                                    @endif
+                                </div>
+
+                                <div class="col-lg-12 mb-2">
+                                    <h3 class="mx-3">Attachments</h3>
+                                </div>
+                                <div class="col-lg-12">
+                                    <div class="table-responsive text-nowrap">
+                                        <table class="table table-striped " id="attachments">
+                                            <thead>
+                                                <tr>
+                                                    <th>File Name</th>
+                                                    <th width="15%">Category</th>
+                                                    <th width="15%">Created At</th>
+                                                    <th width="20%" class="text-center">Actions</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="table-border-bottom-0">
+
+                                            </tbody>
+                                        </table>
+
+                                        <script>
+                                            const route = "{{ route('datatable.module_attachments', encrypt($module_id)) }}"
+
+                                            const columns = [{
+                                                    data: 'file_name',
+                                                    name: 'file_name',
+                                                },
+                                                {
+                                                    data: 'category',
+                                                    name: 'category',
+                                                },
+                                                {
+                                                    data: 'created_at',
+                                                    name: 'created_at',
+                                                },
+                                                {
+                                                    data: 'actions',
+                                                    name: 'actions',
+                                                }
+                                            ]
+
+                                            init_datatable('#attachments', route, columns)
+                                        </script>
+                                    </div>
+                                </div>
+                            </div>
+
+
+
+                        </form>
                     </div>
                     @endif
                 </div>
