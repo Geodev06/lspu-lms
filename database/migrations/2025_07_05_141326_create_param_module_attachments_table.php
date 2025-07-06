@@ -17,6 +17,12 @@ return new class extends Migration
             $table->text('file_name');
             $table->text('sys_file_name');
             $table->string('category');
+
+            $table->integer('k_flag')->default(0);
+            $table->integer('a_flag')->default(0);
+            $table->integer('v_flag')->default(0);
+            $table->integer('r_flag')->default(0);
+
             $table->timestamps();
         });
     }

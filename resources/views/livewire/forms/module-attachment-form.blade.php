@@ -58,6 +58,19 @@
                                 </div>
                             </div>
 
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <p class="text-dark">System will automatically assign modality applied per category. except <span class="text-danger">(kinesthetic)</span></p>
+                                    <ul class="text-success">
+                                        <li>PDF - Reading & Writing | Visual</li>
+                                        <li>AUDIO - Auditory</li>
+                                        <li>VIDEO - Auditory | Visual </li>
+                                        <li>LINK - Auditory | Visual | Reading & Writing </li>
+                                        <li>IMAGE - Visual</li>
+                                    </ul>
+                                </div>
+                            </div>
+
                             <div class="col-lg-6 mb-2">
 
                                 <div class="mb-3">
@@ -76,6 +89,8 @@
                                     </select>
                                 </div>
                             </div>
+
+
 
                             @error('file')
                             <label for="" class="form-label text-danger form-error">{{ $message }}</label>
@@ -110,6 +125,15 @@
                                 </div>
                             </div>
                             @endif
+
+                            <div class="col-lg-12">
+                                <div class="mb-3">
+                                    <div class="form-check">
+                                        <input class="form-check-input" wire:model="kinesthetic" value="1" type="checkbox" id="kinesthetic-me">
+                                        <label class="form-check-label" for="kinesthetic-me">Applied Kinesthetic ? </label>
+                                    </div>
+                                </div>
+                            </div>
 
 
 

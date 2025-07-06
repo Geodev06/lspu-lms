@@ -30,6 +30,12 @@ define('F_AUDIO', 'AUDIO');
 define('F_LINK', 'LINK');
 
 
+define('MULTIPLE_CHOICE', 'MC');
+define('IDENTIFICATION', 'I');
+define('ESSAY', 'E');
+define('HANDS_ON', 'HO');
+
+
 
 
 

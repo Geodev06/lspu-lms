@@ -49,6 +49,7 @@ class SectionForm extends Component
 
     public function process()
     {
+        $this->check_action();
         $validated_data = $this->validate([
             'course' => [
                 'required',

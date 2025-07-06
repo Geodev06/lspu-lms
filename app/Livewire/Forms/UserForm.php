@@ -88,6 +88,7 @@ class UserForm extends Component
 
     public function process()
     {
+        $this->check_action();
         $validated_data = $this->validate([
             'first_name' => 'required|string|max:50',
             'middle_name' => 'nullable|string|max:50',

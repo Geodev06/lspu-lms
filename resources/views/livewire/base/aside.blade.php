@@ -41,8 +41,8 @@
                 </li>
 
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
-                        <div data-i18n="Account">Sections</div>
+                    <a href="{{ route('manage_activity') }}" class="menu-link">
+                        <div data-i18n="Account">Activity</div>
                     </a>
                 </li>
 

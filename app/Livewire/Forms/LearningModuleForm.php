@@ -30,6 +30,8 @@ class LearningModuleForm extends Component
 
     public function delete()
     {
+        $this->check_action();
+
         session()->flash('success', $this->title . ' has been deleted successfully.');
 
         ParamLearningCourseModule::find($this->module_id)->delete();
@@ -72,6 +74,7 @@ class LearningModuleForm extends Component
 
     public function process()
     {
+        $this->check_action();
         $validated_data = $this->validate([
 
             'title' => [

@@ -7,6 +7,7 @@ use App\Models\ParamLearningCourseModule;
 use App\Models\ParamModuleAttachment;
 use App\Models\ParamOrganization;
 use App\Models\ParamSection;
+use App\Models\SetupActivity;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -333,6 +334,88 @@ class DatatableController extends Controller
                     })
 
                     ->rawColumns(['file_name', 'category', 'created_at', 'actions'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+    public function table_setup_activities(Request $request)
+    {
+
+        try {
+
+
+            $user = Auth::user();
+
+            if ($request->ajax()) {
+
+
+                $query = SetupActivity::where('created_by', $user->id)->orderBy('created_at', 'desc')->get();
+
+
+                return DataTables::of($query)
+
+                    ->addColumn('status', function ($row) {
+                        return  $row->active_flag == 'Y' ? 'Active' : 'Inactive';
+                    })
+
+                    ->addColumn('type', function ($row) {
+
+                        $type = '';
+
+                        switch ($row->type) {
+                            case MULTIPLE_CHOICE:
+                                $type = 'Multiple Choice';
+                                break;
+                            case HANDS_ON:
+                                $type = 'Hands On';
+                                break;
+                            case IDENTIFICATION:
+                                $type = 'Identification';
+                                break;
+                            case ESSAY:
+                                $type = 'Essay';
+                                break;
+                        }
+
+                        return $type;
+                    })
+
+                    ->addColumn('org_code', function ($row) {
+                        return   get_org_name($row->org_code);
+                    })
+
+
+                    ->addColumn('actions', function ($row) {
+
+
+
+                        $edit = route('activity_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
+                        $view = route('activity_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_VIEW)]);
+                        $manage = route('activity_form', ['id' => encrypt($row->id), 'action' => encrypt(ACTION_MANAGE)]);
+
+
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                                <a type='button' class='btn btn-icon btn-primary' href='$view' 
+                                >
+                                    <span class='tf-icons text-white bx bx-file'></span>
+                                </a>
+                                <a type='button' class='btn btn-icon btn-info' href='$edit'>
+                                    <span class='tf-icons bx bx-pencil'></span>
+                                </a>
+
+                                <a type='button' class='btn btn-icon btn-dark' href='$manage'>
+                                    <span class='tf-icons bx bx-folder'></span>
+                                </a>
+
+                            </div>
+                        ";
+                    })
+
+                    ->rawColumns(['title',  'status', 'actions', 'org_code', 'type'])
                     ->make(true);
             }
         } catch (\Throwable $th) {

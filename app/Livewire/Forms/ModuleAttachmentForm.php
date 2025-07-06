@@ -34,6 +34,7 @@ class ModuleAttachmentForm extends Component
     public $course_org_code;
 
 
+    public $kinesthetic;
 
 
     public $file;
@@ -45,7 +46,7 @@ class ModuleAttachmentForm extends Component
     {
         session()->flash('success', 'Record has been deleted successfully.');
 
-        
+
         ParamModuleAttachment::find(decrypt($this->attachment_id))->delete();
 
         $this->redirect(route('learning_module_form', [
@@ -81,6 +82,7 @@ class ModuleAttachmentForm extends Component
 
             $this->file = $this->record->file;
             $this->category = $this->record->category;
+            $this->kinesthetic = $this->record->k_flag;
         } else {
             $this->category = F_PDF;
         }
@@ -89,6 +91,9 @@ class ModuleAttachmentForm extends Component
 
     public function process()
     {
+
+        $this->check_action();
+        
         $rules = [
             'file' => 'required|file|max:5120', // 5MB = 5120 KB
         ];
@@ -145,6 +150,11 @@ class ModuleAttachmentForm extends Component
             $data = [
                 'module_id' => $this->module_id,
                 'category'  => $this->category,
+                'a_flag' => 0,
+                'v_flag' => 0,
+                'k_flag' => $this->kinesthetic ?? 0,
+                'r_flag' => 0,
+
             ];
 
             // For link-type attachments, store the URL/string directly
@@ -162,6 +172,22 @@ class ModuleAttachmentForm extends Component
                 // Set file info in $data
                 $data['file_name']     = $this->file->getClientOriginalName(); // original name
                 $data['sys_file_name'] = $filename; // unique stored name
+            }
+
+            if ($this->category === F_LINK) {
+                $data['a_flag'] = 1;
+                $data['v_flag'] = 1;
+                $data['r_flag'] = 1;
+            } elseif ($this->category === F_AUDIO) {
+                $data['a_flag'] = 1;
+            } elseif ($this->category === F_VIDEO) {
+                $data['a_flag'] = 1;
+                $data['v_flag'] = 1;
+            } elseif ($this->category === F_PDF) {
+                $data['r_flag'] = 1;
+                $data['v_flag'] = 1;
+            } elseif ($this->category === F_IMAGE) {
+                $data['v_flag'] = 1;
             }
 
 
