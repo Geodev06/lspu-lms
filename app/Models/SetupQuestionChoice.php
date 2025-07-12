@@ -11,6 +11,7 @@ class SetupQuestionChoice extends Model
 
     protected $fillable = [
         'question_id',
-        'choice'
+        'choice',
+        'key'
     ];
 }

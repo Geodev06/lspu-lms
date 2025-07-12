@@ -14,6 +14,7 @@ return new class extends Migration
         Schema::create('setup_question_choices', function (Blueprint $table) {
             $table->id();
             $table->integer('question_id');
+            $table->string('key');
             $table->text('choice');
             $table->timestamps();
         });

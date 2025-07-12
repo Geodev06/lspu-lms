@@ -16,7 +16,7 @@
 
                       @if($action == ACTION_EDIT OR $action == null)
                       <div class="card-body">
-                          <h2>User Form</h2>
+                          <h2>Section Form</h2>
                           <form id="formAuthentication" class="mb-3 row" method="POST">
 
 

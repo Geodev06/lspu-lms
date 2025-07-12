@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('setup_activity_questions', function (Blueprint $table) {
             $table->id();
             $table->integer('activity_id');
-            $table->string('question');
-            $table->string('answer');
+            $table->text('question');
+            $table->text('answer')->nullable(1);
             $table->integer('points');
             $table->text('image')->nullable(true);
 

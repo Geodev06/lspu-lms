@@ -8,6 +8,7 @@ use App\Models\ParamModuleAttachment;
 use App\Models\ParamOrganization;
 use App\Models\ParamSection;
 use App\Models\SetupActivity;
+use App\Models\SetupActivityQuestion;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -416,6 +417,52 @@ class DatatableController extends Controller
                     })
 
                     ->rawColumns(['title',  'status', 'actions', 'org_code', 'type'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+    public function table_setup_questions($activity_id, Request $request)
+    {
+
+        try {
+
+
+            $user = Auth::user();
+
+            $activity_id = decrypt($activity_id);
+
+            if ($request->ajax()) {
+
+
+                $query = SetupActivityQuestion::where('activity_id', $activity_id)->orderBy('created_at', 'desc')->get();
+
+
+                return DataTables::of($query)
+
+                    ->addColumn('actions', function ($row) {
+
+                        $edit = route('activity_question_form', ['activity_id' => encrypt($row->activity_id), 'id' => encrypt($row->id), 'action' => encrypt(ACTION_EDIT)]);
+                        $view = route('activity_question_form', ['activity_id' => encrypt($row->activity_id), 'id' => encrypt($row->id), 'action' => encrypt(ACTION_VIEW)]);
+
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                                <a type='button' class='btn btn-icon btn-primary' href='$view' 
+                                >
+                                    <span class='tf-icons text-white bx bx-file'></span>
+                                </a>
+                                <a type='button' class='btn btn-icon btn-info' href='$edit'>
+                                    <span class='tf-icons bx bx-pencil'></span>
+                                </a>
+
+
+                            </div>
+                        ";
+                    })
+
+                    ->rawColumns(['question',  'answer', 'actions', 'points'])
                     ->make(true);
             }
         } catch (\Throwable $th) {

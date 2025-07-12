@@ -20,6 +20,7 @@
                         </a>
                     </div>
 
+
                     @if($action == ACTION_EDIT OR $action == null)
                     <div class="card-body">
                         <h2>Setup Activity Form</h2>
@@ -215,7 +216,6 @@
                                         <b>{{ $record->title }}</b>
                                     </div>
 
-                                   
 
                                     <div class="col-lg-8 mb-2">
                                         <p class="m-0">Department</p>
@@ -232,14 +232,109 @@
                                         <b>{{ get_module_name($module)}}</b>
                                     </div>
 
-                                     <div class="col-lg-12 mb-2">
+                                    <div class="col-lg-12 mb-2">
                                         <p class="m-0">Description</p>
                                         <b>{!! $description !!}</b>
                                     </div>
 
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    @elseif($action == ACTION_MANAGE)
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-12 mx-auto  ">
+                                <div class="row bg-dark p-4">
+                                    <div class="col-lg-4 mb-2">
+                                        <p class="m-0">Title</p>
+                                        <b class="text-white">{{ $record->title }}</b>
+                                    </div>
+
+                                    <div class="col-lg-8 mb-2">
+                                        <p class="m-0">Department</p>
+                                        <b class="text-white">{{ get_org_name($org_code)}}</b>
+                                    </div>
+
+                                    <div class="col-lg-4 mb-2">
+                                        <p class="m-0">Course</p>
+                                        <b class="text-white">{{ get_course_name($course)}}</b>
+                                    </div>
+
+                                    <div class="col-lg-4 mb-2">
+                                        <p class="m-0">Module</p>
+                                        <b class="text-white">{{ get_module_name($module)}}</b>
+                                    </div>
+
+                                    <div class="col-lg-4 mb-2">
+                                        <p class="m-0">Total Points</p>
+                                        <b class="text-white">{{ get_total_activity_points($id)}}</b>
+                                    </div>
+
+                                </div>
 
 
+                                <div class="row g-6 mb-3 mt-3">
+                                    <div class="col-lg-12 mb-3">
+                                        <div class="card-header">
+                                            <a href="{{ route('activity_question_form', encrypt($id)) }}" class="btn rounded-pill float-end btn-primary text-white">
+                                                <span class="tf-icons bx bx-plus"></span> Add Question
+                                            </a>
 
+                                        </div>
+
+
+                                        <div class="col-lg-12 mb-2">
+                                            <h3 class="mx-3">Questions Table</h3>
+                                            <div class="col-lg-12 mb-2">
+                                                @if(session('success'))
+                                                <x-message-alert type="success" message="{{ session('success') }}" />
+                                                @endif
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-12">
+                                            <div class="table-responsive text-nowrap">
+                                                <table class="table table-striped " id="setup_questions">
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Question</th>
+                                                            <th width="10%">Answer</th>
+                                                            <th width="10%">Points</th>
+                                                            <th width="15%">Actions</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody class="table-border-bottom-0">
+
+                                                    </tbody>
+                                                </table>
+
+                                                <script>
+                                                    const route = "{{ route('datatable.setup_questions', encrypt($id)) }}"
+
+                                                    const columns = [{
+                                                            data: 'question',
+                                                            name: 'question',
+                                                        },
+                                                        {
+                                                            data: 'answer',
+                                                            name: 'answer',
+                                                        },
+                                                        {
+                                                            data: 'points',
+                                                            name: 'points',
+                                                        },
+                                                        {
+                                                            data: 'actions',
+                                                            name: 'actions',
+                                                        }
+                                                    ]
+
+                                                    init_datatable('#setup_questions', route, columns)
+                                                </script>
+                                            </div>
+                                        </div>
+                                    </div>
 
                                 </div>
                             </div>

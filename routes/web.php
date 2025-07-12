@@ -9,6 +9,7 @@ use App\Livewire\Forms\ModuleAttachmentForm;
 use App\Livewire\Forms\OrganizationForm;
 use App\Livewire\Forms\SectionForm;
 use App\Livewire\Forms\SetupActivitForm;
+use App\Livewire\Forms\SetupQuestionForm;
 use App\Livewire\Forms\UserForm;
 use App\Livewire\Pages\Dashboard;
 use App\Livewire\Pages\ManageActivity;
@@ -71,6 +72,8 @@ Route::middleware(['auth', 'cfs'])->group(function () {
 
     // Setup Activity
     Route::get('/manage/activity/form/{id?}/{action?}', SetupActivitForm::class)->name('activity_form');
+    Route::get('/manage/activity/question/form/{activity_id?}/{id?}/{action?}', SetupQuestionForm::class)->name('activity_question_form');
+
 
     
 });
@@ -86,6 +89,8 @@ Route::controller(DatatableController::class)
         Route::get('/table_learning_modules/{course_id}', 'table_learning_modules')->name('learning_modules');
         Route::get('/table_module_attachments/{module_id}', 'table_module_attachments')->name('module_attachments');
         Route::get('/table_setup_activities', 'table_setup_activities')->name('setup_activities');
+        Route::get('/table_setup_questions/{activity_id?}', 'table_setup_questions')->name('setup_questions');
+
 
 
 

@@ -141,6 +141,7 @@ class SetupActivitForm extends Component
                 'created_by'          => Auth::user()->id,
                 'course_id'           => $this->course,
                 'module_id'           => $this->module,
+                'type'                => $this->type,
                 'ide_id'              => $this->ide_id ?? null
 
 
