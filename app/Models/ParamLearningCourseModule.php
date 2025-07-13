@@ -9,9 +9,14 @@ class ParamLearningCourseModule extends Model
 {
     use HasFactory;
 
-     protected $fillable = [
+    protected $fillable = [
         'title',
         'learning_course_id',
         'description'
     ];
+
+    public function files()
+    {
+        return $this->hasMany(ParamModuleAttachment::class, 'module_id', 'id');
+    }
 }

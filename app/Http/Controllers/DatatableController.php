@@ -469,4 +469,86 @@ class DatatableController extends Controller
             Log::error($th->getMessage());
         }
     }
+
+    public function table_course_activities($course_id, Request $request)
+    {
+
+        try {
+
+
+            $user = Auth::user();
+
+            if ($request->ajax()) {
+
+
+                $query = SetupActivity::where(
+                    [
+                        'course_id' => decrypt($course_id)
+                    ]
+                )->orderBy('created_at', 'desc')->get();
+
+
+                return DataTables::of($query)
+
+                    ->addColumn('status', function ($row) {
+                        return  $row->active_flag == 'Y' ? 'Active' : 'Inactive';
+                    })
+
+                    ->addColumn('items', function ($row) {
+                        return  SetupActivityQuestion::where('activity_id', $row->id)->sum('points');
+                    })
+
+                    ->addColumn('module', function ($row) {
+                        return get_module_name($row->module_id);
+                    })
+
+                    ->addColumn('type', function ($row) {
+
+                        $type = '';
+
+                        switch ($row->type) {
+                            case MULTIPLE_CHOICE:
+                                $type = 'Multiple Choice';
+                                break;
+                            case HANDS_ON:
+                                $type = 'Hands On';
+                                break;
+                            case IDENTIFICATION:
+                                $type = 'Identification';
+                                break;
+                            case ESSAY:
+                                $type = 'Essay';
+                                break;
+                        }
+
+                        return $type;
+                    })
+
+
+                    ->addColumn('actions', function ($row) {
+
+
+
+                        $edit = route('user_activity_form', ['activity_id' => encrypt($row->id), 'action' => encrypt(ACTION_ADD)]);
+
+
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                               
+                                <a type='button' class='btn btn-icon btn-success' href='$edit'>
+                                    <span class='tf-icons bx bxs-comment-check'></span>
+                                </a>
+
+
+                            </div>
+                        ";
+                    })
+
+                    ->rawColumns(['title',  'status', 'actions', 'module', 'items', 'type'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
 }

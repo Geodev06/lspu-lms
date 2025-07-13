@@ -57,7 +57,6 @@ class ModuleAttachmentForm extends Component
         ]));
     }
 
-    public function updated() {}
 
     public function mount($course_id = null, $module_id = null, $attachment_id = null, $action = null)
     {
@@ -83,8 +82,11 @@ class ModuleAttachmentForm extends Component
             $this->file = $this->record->file;
             $this->category = $this->record->category;
             $this->kinesthetic = $this->record->k_flag;
+
         } else {
+
             $this->category = F_PDF;
+
         }
     }
 
@@ -144,8 +146,8 @@ class ModuleAttachmentForm extends Component
         $this->validate($rules, $messages);
 
         try {
-            DB::beginTransaction();
 
+            DB::beginTransaction();
 
             $data = [
                 'module_id' => $this->module_id,
@@ -162,7 +164,9 @@ class ModuleAttachmentForm extends Component
 
                 $data['file_name']     = $this->file;
                 $data['sys_file_name'] = $this->file;
+
             } elseif ($this->file instanceof \Illuminate\Http\UploadedFile) {
+
                 $extension = $this->file->getClientOriginalExtension();
                 $filename  = Str::random(20) . '.' . $extension;
 
@@ -193,9 +197,10 @@ class ModuleAttachmentForm extends Component
 
             if ($this->attachment_id) {
 
-                ParamModuleAttachment::find($this->attachment_id)->update($data);
+                ParamModuleAttachment::find(decrypt($this->attachment_id))->update($data);
 
                 session()->flash('success', 'Record has been successfully updated.');
+
             } else {
 
                 ParamModuleAttachment::create($data);
@@ -207,12 +212,11 @@ class ModuleAttachmentForm extends Component
                 'course_id' => encrypt($this->course_id),
                 'module_id' => encrypt($this->module_id),
                 'action' => encrypt(ACTION_MANAGE),
-
-
             ]));
 
 
             DB::commit();
+
         } catch (\Throwable $th) {
 
             Log::error($th->getMessage());

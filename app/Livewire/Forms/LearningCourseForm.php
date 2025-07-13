@@ -65,6 +65,13 @@ class LearningCourseForm extends Component
     }
 
 
+    public function randomImage() {
+        $randomNumber = rand(1, 14);
+        return 'education' . $randomNumber;
+    }
+
+
+
     public function process()
     {
         $this->check_action();
@@ -98,7 +105,8 @@ class LearningCourseForm extends Component
                 'description'         => $this->description,
                 'active_flag'    => $this->active_flag,
                 'course_code'    => $this->course_code,
-                'created_by'   => Auth::user()->id
+                'created_by'   => Auth::user()->id,
+                'banner'        => $this->randomImage()
             ];
 
             if ($this->id) {

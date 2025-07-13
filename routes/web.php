@@ -10,6 +10,7 @@ use App\Livewire\Forms\OrganizationForm;
 use App\Livewire\Forms\SectionForm;
 use App\Livewire\Forms\SetupActivitForm;
 use App\Livewire\Forms\SetupQuestionForm;
+use App\Livewire\Forms\UserActivityForm;
 use App\Livewire\Forms\UserForm;
 use App\Livewire\Pages\Dashboard;
 use App\Livewire\Pages\ManageActivity;
@@ -17,7 +18,9 @@ use App\Livewire\Pages\ManageLearningCourses;
 use App\Livewire\Pages\Organizations;
 use App\Livewire\Pages\Sections;
 use App\Livewire\Pages\Survey;
+use App\Livewire\Pages\UserCourses;
 use App\Livewire\Pages\Users;
+use App\Livewire\Pages\ViewCourse;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
@@ -38,8 +41,16 @@ Route::prefix('/')->group(function () {
 })->middleware('guest');
 
 Route::middleware(['auth', 'cfs'])->group(function () {
-    Route::get('/dashboard', Dashboard::class)->name('dashboard');
 
+
+
+    // student
+    Route::get('/courses', UserCourses::class)->name('user_courses');
+    Route::get('/courses/view/{id}', ViewCourse::class)->name('user_view_course');
+
+
+    // System admin and teacher
+    Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/manage/learning-course', ManageLearningCourses::class)->name('manage_learning_course');
     Route::get('/manage/manage-activity', ManageActivity::class)->name('manage_activity');
 
@@ -75,6 +86,11 @@ Route::middleware(['auth', 'cfs'])->group(function () {
     Route::get('/manage/activity/question/form/{activity_id?}/{id?}/{action?}', SetupQuestionForm::class)->name('activity_question_form');
 
 
+    // Assessment for users
+    Route::get('/courses/take-activity/{activity_id}/{action}', UserActivityForm::class)->name('user_activity_form');
+
+
+
     
 });
 
@@ -91,6 +107,8 @@ Route::controller(DatatableController::class)
         Route::get('/table_setup_activities', 'table_setup_activities')->name('setup_activities');
         Route::get('/table_setup_questions/{activity_id?}', 'table_setup_questions')->name('setup_questions');
 
+
+        Route::get('/table_course_activities/{course_id}', 'table_course_activities')->name('course_activities');
 
 
 

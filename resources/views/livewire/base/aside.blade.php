@@ -81,14 +81,14 @@
         @endif
 
         @if(in_array(Auth::user()->role, [ROLE_STUDENT]))
-        <li class="menu-item {{ str_contains(url()->current(), 'manage') ? 'active' : '' }}">
+        <li class="menu-item {{ str_contains(url()->current(), 'courses') ? 'active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Account Settings">Explore</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('user_courses') }}" class="menu-link">
                         <div data-i18n="Account">Courses</div>
                     </a>
                 </li>
