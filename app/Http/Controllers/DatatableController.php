@@ -10,6 +10,7 @@ use App\Models\ParamSection;
 use App\Models\SetupActivity;
 use App\Models\SetupActivityQuestion;
 use App\Models\User;
+use App\Models\UserActivitySubmission;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Log;
@@ -491,7 +492,22 @@ class DatatableController extends Controller
                 return DataTables::of($query)
 
                     ->addColumn('status', function ($row) {
-                        return  $row->active_flag == 'Y' ? 'Active' : 'Inactive';
+                        $submission = UserActivitySubmission::where([
+                            'created_by' => Auth::user()->id,
+                            'activity_id' => $row->id
+                        ])->first();
+
+                        if ($submission) {
+                            $grade = $submission->grade ?? 0.0;
+
+                            if ($submission->checked_flag == 1) {
+                                return $grade . "%";
+                            } else {
+                                return "For Checking";
+                            }
+                        } else {
+                            return "Not started.";
+                        }
                     })
 
                     ->addColumn('items', function ($row) {
@@ -529,10 +545,15 @@ class DatatableController extends Controller
 
 
 
-                        $edit = route('user_activity_form', ['activity_id' => encrypt($row->id), 'action' => encrypt(ACTION_ADD)]);
+                        if (!UserActivitySubmission::where(
+                            [
+                                'created_by' => Auth::user()->id,
+                                'activity_id' => $row->id
+                            ]
+                        )->first()) {
+                            $edit = route('user_activity_form', ['activity_id' => encrypt($row->id), 'action' => encrypt(ACTION_ADD)]);
 
-
-                        return "
+                            return "
                             <div class='demo-inline-spacing text-center'>
                                
                                 <a type='button' class='btn btn-icon btn-success' href='$edit'>
@@ -542,6 +563,13 @@ class DatatableController extends Controller
 
                             </div>
                         ";
+                        } else {
+
+                            return "
+                            <div class='demo-inline-spacing text-center'>
+                                <span class='badge bg-label-success'>Done</span>
+                            </div>";
+                        }
                     })
 
                     ->rawColumns(['title',  'status', 'actions', 'module', 'items', 'type'])

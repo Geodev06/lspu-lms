@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Model;
 class SetupActivityQuestion extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = [
         'activity_id',
         'question',
@@ -17,4 +17,8 @@ class SetupActivityQuestion extends Model
         'image'
     ];
 
+    public function choices()
+    {
+        return $this->hasMany(SetupQuestionChoice::class, 'question_id');
+    }
 }

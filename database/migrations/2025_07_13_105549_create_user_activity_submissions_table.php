@@ -13,6 +13,7 @@ return new class extends Migration
     {
         Schema::create('user_activity_submissions', function (Blueprint $table) {
             $table->id();
+            $table->integer('activity_id');
 
             $table->text('course_name');
             $table->text('module_name');
@@ -22,9 +23,10 @@ return new class extends Migration
             
             $table->string('activity_type');
 
-            $table->decimal('points', 10, 2)->default(0.0);
+            $table->decimal('points', 10, 2)->nullable(1)->default(0.0);
             $table->decimal('grade', 10, 2)->nullable(1)->default(0.0);
 
+            $table->integer('checked_flag')->default(1);
 
             $table->integer('created_by');
             $table->timestamps();

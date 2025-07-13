@@ -8,4 +8,12 @@ use Illuminate\Database\Eloquent\Model;
 class UserActivitySubmissionDetail extends Model
 {
     use HasFactory;
+
+    protected $fillable = [
+        'activity_submission_id',
+        'question',
+        'answer',
+        'correct_answer',
+        'points'
+    ];
 }
