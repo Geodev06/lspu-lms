@@ -58,7 +58,7 @@
             </a>
             <ul class="menu-sub">
 
-            <li class="menu-item">
+                <li class="menu-item">
                     <a href="{{ route('sections') }}" class="menu-link">
                         <div data-i18n="Account">Param Sections</div>
                     </a>
@@ -70,7 +70,7 @@
                     </a>
                 </li>
 
-                 <li class="menu-item">
+                <li class="menu-item">
                     <a href="{{ route('users') }}" class="menu-link">
                         <div data-i18n="Account">Users</div>
                     </a>
@@ -90,6 +90,12 @@
                 <li class="menu-item">
                     <a href="{{ route('user_courses') }}" class="menu-link">
                         <div data-i18n="Account">Courses</div>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="{{ route('user_activity') }}" class="menu-link">
+                        <div data-i18n="Account">Activities</div>
                     </a>
                 </li>
 
@@ -114,7 +120,7 @@
                     </a>
                 </li>
                 <li class="menu-item">
-                    <a href="#" class="menu-link">
+                    <a href="{{ route('notification_page') }}" class="menu-link">
                         <div data-i18n="Notifications">Notifications</div>
                     </a>
                 </li>

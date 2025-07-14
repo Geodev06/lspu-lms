@@ -203,7 +203,7 @@
                                                                      <th>Module</th>
                                                                      <th width="9%">Type</th>
                                                                      <th width="8%">Total Points</th>
-                                                                     <th width="12%">Status</th>
+                                                                     <th width="12%">Grade</th>
                                                                      <th width="16%">Actions</th>
                                                                  </tr>
                                                              </thead>

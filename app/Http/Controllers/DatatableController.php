@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Notification;
 use App\Models\ParamLearningCourse;
 use App\Models\ParamLearningCourseModule;
 use App\Models\ParamModuleAttachment;
@@ -573,6 +574,162 @@ class DatatableController extends Controller
                     })
 
                     ->rawColumns(['title',  'status', 'actions', 'module', 'items', 'type'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+    public function table_course_activities_all(Request $request)
+    {
+
+        try {
+
+
+            $user = Auth::user();
+
+            if ($request->ajax()) {
+
+
+                $query = SetupActivity::where(
+                    [
+                        'org_code' => Auth::user()->org_code
+                    ]
+                )->orderBy('created_at', 'desc')->get();
+
+
+                return DataTables::of($query)
+
+                    ->addColumn('status', function ($row) {
+                        $submission = UserActivitySubmission::where([
+                            'created_by' => Auth::user()->id,
+                            'activity_id' => $row->id
+                        ])->first();
+
+                        if ($submission) {
+                            $grade = $submission->grade ?? 0.0;
+
+                            if ($submission->checked_flag == 1) {
+                                return $grade . "%";
+                            } else {
+                                return "For Checking";
+                            }
+                        } else {
+                            return "Not started.";
+                        }
+                    })
+
+                    ->addColumn('items', function ($row) {
+                        return  SetupActivityQuestion::where('activity_id', $row->id)->sum('points');
+                    })
+
+                    ->addColumn('module', function ($row) {
+                        return get_module_name($row->module_id);
+                    })
+
+                    ->addColumn('type', function ($row) {
+
+                        $type = '';
+
+                        switch ($row->type) {
+                            case MULTIPLE_CHOICE:
+                                $type = 'Multiple Choice';
+                                break;
+                            case HANDS_ON:
+                                $type = 'Hands On';
+                                break;
+                            case IDENTIFICATION:
+                                $type = 'Identification';
+                                break;
+                            case ESSAY:
+                                $type = 'Essay';
+                                break;
+                        }
+
+                        return $type;
+                    })
+
+
+                    ->addColumn('actions', function ($row) {
+
+
+
+                        if (!UserActivitySubmission::where(
+                            [
+                                'created_by' => Auth::user()->id,
+                                'activity_id' => $row->id
+                            ]
+                        )->first()) {
+                            $edit = route('user_activity_form', ['activity_id' => encrypt($row->id), 'action' => encrypt(ACTION_ADD)]);
+
+                            return "
+                            <div class='demo-inline-spacing text-center'>
+                               
+                                <a type='button' class='btn btn-icon btn-success' href='$edit'>
+                                    <span class='tf-icons bx bxs-comment-check'></span>
+                                </a>
+
+
+                            </div>
+                        ";
+                        } else {
+
+                            return "
+                            <div class='demo-inline-spacing text-center'>
+                                <span class='badge bg-label-success'>Done</span>
+                            </div>";
+                        }
+                    })
+
+                    ->rawColumns(['title',  'status', 'actions', 'module', 'items', 'type'])
+                    ->make(true);
+            }
+        } catch (\Throwable $th) {
+            Log::error($th->getMessage());
+        }
+    }
+
+    public function table_notifications(Request $request)
+    {
+
+        try {
+
+
+            $user = Auth::user();
+
+            if ($request->ajax()) {
+
+
+                $query = Notification::where('receiver_id', $user->id)->get();
+
+                return DataTables::of($query)
+
+                    ->addColumn('status', function ($row) {
+
+                        return $row->seen_flag == 1 ? 'Seen' : 'Not Seen';
+                    })
+
+                    ->addColumn('icon', function ($row) {
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                                <span class='tf-icons text-primary $row->icon'></span>
+                            </div>";
+                    })
+
+                    ->addColumn('actions', function ($row) {
+
+                        return "
+                            <div class='demo-inline-spacing text-center'>
+                                <a type='button' class='btn btn-icon btn-primary' href='$row->link'>
+                                    <span class='tf-icons bx bxs-comment-check'></span>
+                                </a>
+
+                            </div>
+                        ";
+                    })
+
+                    ->rawColumns(['title',  'message', 'actions', 'status', 'icon'])
                     ->make(true);
             }
         } catch (\Throwable $th) {

@@ -54,21 +54,25 @@
                     <!-- Notification List -->
                     <li class="dropdown-notifications-list overflow-auto" style="max-height: 300px;">
                         <ul class="list-group list-group-flush">
-                            <!-- <li class="list-group-item list-group-item-action">
-                                <a href="" class="d-flex align-items-start">
-                                    <i class=" dodgerblue me-3"></i>
+                            @forelse($notifications as $item)
+                            <li class="list-group-item list-group-item-action" wire:click="update_status({{ $item->id}})">
+                                <a href="{{ $item->link }}" class="d-flex align-items-start">
+                                    <i class="{{ $item->icon }} dodgerblue me-3"></i>
                                     <div class="flex-grow-1">
-                                        <h6 class="mb-1 fw-semibold"></h6>
-                                        <p class="mb-1 small text-muted"></p>
-                                        <small class="text-muted"></small>
+                                        <h6 class="mb-1 fw-semibold text-success">{{ $item->title }}</h6>
+                                        <p class="mb-1 small text-dark">{{ $item->message }}</p>
+                                        <small class="text-muted">{{ $item->created_at->diffForHumans() }}</small>
                                     </div>
                                 </a>
-                            </li> -->
+                            </li>
+                            @empty
                             <li class="list-group-item list-group-item-action">
                                 <a href="#" class="d-flex align-items-start">
                                     No Notifications
                                 </a>
                             </li>
+                            @endforelse
+
 
                             <!-- Add more items here -->
                         </ul>
@@ -119,7 +123,7 @@
                             <span class="align-middle">Settings</span>
                         </a>
                     </li>
-                  
+
                     <li>
                         <div class="dropdown-divider"></div>
                     </li>

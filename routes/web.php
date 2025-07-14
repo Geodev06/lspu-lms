@@ -15,9 +15,12 @@ use App\Livewire\Forms\UserForm;
 use App\Livewire\Pages\Dashboard;
 use App\Livewire\Pages\ManageActivity;
 use App\Livewire\Pages\ManageLearningCourses;
+use App\Livewire\Pages\NotificationPage;
 use App\Livewire\Pages\Organizations;
 use App\Livewire\Pages\Sections;
 use App\Livewire\Pages\Survey;
+use App\Livewire\Pages\UserActivity;
+use App\Livewire\Pages\UserActivityResponse;
 use App\Livewire\Pages\UserCourses;
 use App\Livewire\Pages\Users;
 use App\Livewire\Pages\ViewCourse;
@@ -47,12 +50,18 @@ Route::middleware(['auth', 'cfs'])->group(function () {
     // student
     Route::get('/courses', UserCourses::class)->name('user_courses');
     Route::get('/courses/view/{id}', ViewCourse::class)->name('user_view_course');
+    Route::get('/courses/activity', UserActivity::class)->name('user_activity');
+
 
 
     // System admin and teacher
     Route::get('/dashboard', Dashboard::class)->name('dashboard');
     Route::get('/manage/learning-course', ManageLearningCourses::class)->name('manage_learning_course');
     Route::get('/manage/manage-activity', ManageActivity::class)->name('manage_activity');
+
+    // Account
+    Route::get('/account/notifications', NotificationPage::class)->name('notification_page');
+
 
 
 
@@ -88,7 +97,7 @@ Route::middleware(['auth', 'cfs'])->group(function () {
 
     // Assessment for users
     Route::get('/courses/take-activity/{activity_id}/{action}', UserActivityForm::class)->name('user_activity_form');
-
+    Route::get('/courses/activity/{submission_id}/{action}', UserActivityResponse::class)->name('user_activity_response');
 
 
     
@@ -109,6 +118,10 @@ Route::controller(DatatableController::class)
 
 
         Route::get('/table_course_activities/{course_id}', 'table_course_activities')->name('course_activities');
+        Route::get('/table_course_activities_all', 'table_course_activities_all')->name('course_activities_all');
+
+        Route::get('/table_notifications', 'table_notifications')->name('notifications');
+
 
 
 

@@ -66,7 +66,7 @@ class UserActivityForm extends Component
                 'activity_type' => $this->activity->type,
                 'points' => 0,
                 'grade' => 0,
-                'checked_flag' => in_array($this->activity->type, ['E','HO']) ? 0 : 1,
+                'checked_flag' => in_array($this->activity->type, ['E', 'HO']) ? 0 : 1,
                 'created_by' => Auth::user()->id
             ];
 
@@ -88,6 +88,7 @@ class UserActivityForm extends Component
                         'question' => $question->question,
                         'answer' => $this->answers[$key],
                         'points' => $this->answers[$key] == $question->answer ? $question->points : 0,
+                        'max_points' => $question->points,
                         'correct_answer' => $question->answer
 
                     ];
@@ -106,19 +107,18 @@ class UserActivityForm extends Component
                 );
             }
 
-            $link = route('user_activity_form', [
-                'activity_id' => encrypt($this->activity_id),
-                'action'      => encrypt(ACTION_EDIT)
+            $link = route('user_activity_response', [
+                'submission_id' => encrypt($activity_submitted->id),
+                'action'      => encrypt(in_array($this->activity->type, [HANDS_ON, ESSAY]) ? ACTION_EDIT : ACTION_VIEW)
             ]);
 
-            $this->send_notification('bx bx-envelope-open', 'Activity Submission','Activty Submission has been made by '. get_user_fullname(Auth::user()->id), $link, $this->activity->created_by );
-            
+            $this->send_notification('bx bx-envelope-open', 'Activity Submission', 'Activty Submission has been made by ' . get_user_fullname(Auth::user()->id), $link, $this->activity->created_by);
+
             DB::commit();
 
             session()->flash('success', 'Submission Successfull.');
 
             $this->redirect(route('user_view_course', encrypt($this->activity->course_id)));
-
         } catch (\Throwable $th) {
             DB::rollBack();
             Log::error($th->getMessage());

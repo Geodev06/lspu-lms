@@ -17,7 +17,9 @@ return new class extends Migration
             $table->text('question');
             $table->text('answer');
             $table->text('correct_answer')->nullable(1);
-            $table->text('points')->nullable(1);
+            $table->integer('points')->nullable(1);
+            $table->integer('max_points')->nullable(1);
+
             $table->timestamps();
         });
     }
