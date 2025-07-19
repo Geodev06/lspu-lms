@@ -33,7 +33,7 @@ class UserActivityResponse extends Component
         $this->submission = UserActivitySubmission::find($this->submission_id);
         $this->submission_details = UserActivitySubmissionDetail::where('activity_submission_id', $this->submission_id)->get();
 
-
+        $this->activity = SetupActivity::find($this->submission->activity_id);
     }
 
     public function submit()
@@ -90,6 +90,22 @@ class UserActivityResponse extends Component
 
                 ]
             );
+
+
+            if (in_array($this->activity->type, [ESSAY, HANDS_ON])) {
+                $modalities = [
+                    'a_flag' => 'auditory',
+                    'k_flag' => 'kinesthetic',
+                    'r_flag' => 'reading_and_writing',
+                    'v_flag' => 'visual',
+                ];
+
+                foreach ($modalities as $flag => $modality) {
+                    if ($this->activity->$flag == 1) {
+                        $this->update_bandit($this->submission->created_by, $modality, $grade);
+                    }
+                }
+            }
 
 
             $link = route('user_activity_response', [

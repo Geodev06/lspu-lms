@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\DatatableController;
+use App\Http\Controllers\HighChartController;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
 use App\Livewire\Forms\LearningCourseForm;
@@ -98,9 +99,6 @@ Route::middleware(['auth', 'cfs'])->group(function () {
     // Assessment for users
     Route::get('/courses/take-activity/{activity_id}/{action}', UserActivityForm::class)->name('user_activity_form');
     Route::get('/courses/activity/{submission_id}/{action}', UserActivityResponse::class)->name('user_activity_response');
-
-
-    
 });
 
 Route::controller(DatatableController::class)
@@ -121,9 +119,16 @@ Route::controller(DatatableController::class)
         Route::get('/table_course_activities_all', 'table_course_activities_all')->name('course_activities_all');
 
         Route::get('/table_notifications', 'table_notifications')->name('notifications');
+    });
+
+Route::controller(HighChartController::class)
+    ->group(function () {
+        Route::get('/get_line_1', 'get_line_1')->name('get_line_1');
+        Route::get('/get_bar_1', 'get_bar_1')->name('get_bar_1');
+
+        Route::get('/get_t_bar_1', 'get_t_bar_1')->name('get_t_bar_1');
 
 
 
-
-
+      
     });

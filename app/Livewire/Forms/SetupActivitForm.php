@@ -41,6 +41,9 @@ class SetupActivitForm extends Component
     public $include_ide = 0;
     public $ide_id;
 
+    public $a_flag, $v_flag, $k_flag, $r_flag = 0;
+
+
 
 
     public function mount($id = null, $action = null)
@@ -62,15 +65,16 @@ class SetupActivitForm extends Component
             $this->learning_modules = ParamLearningCourseModule::where('learning_course_id', $this->record->course_id)->orderBy('created_at', 'desc')->get();
             $this->module = $this->record->module_id;
 
-            if($this->record->ide_id != null)
-            {
+            if ($this->record->ide_id != null) {
                 $this->include_ide = 1;
             }
 
             $this->ide_id = $this->record->ide_id;
 
-
-
+            $this->a_flag = $this->record->a_flag;
+            $this->k_flag = $this->record->k_flag;
+            $this->v_flag = $this->record->v_flag;
+            $this->r_flag = $this->record->r_flag;
 
         }
 
@@ -114,11 +118,9 @@ class SetupActivitForm extends Component
 
         ];
 
-        if($this->include_ide)
-        {
+        if ($this->include_ide) {
             $rules['ide_id'] = 'required';
-
-        }else {
+        } else {
 
             unset($rules['ide_id']);
         }
@@ -142,9 +144,13 @@ class SetupActivitForm extends Component
                 'course_id'           => $this->course,
                 'module_id'           => $this->module,
                 'type'                => $this->type,
-                'ide_id'              => $this->ide_id ?? null
+                'ide_id'              => $this->ide_id ?? null,
 
-
+                'a_flag'              => $this->a_flag ?? 0,
+                'v_flag'              => $this->v_flag ?? 0,
+                'r_flag'              => $this->r_flag ?? 0,
+                'k_flag'              => $this->k_flag ?? 0
+                
             ];
 
 

@@ -86,7 +86,7 @@
                                          <div class="tab-pane fade" id="navs-justified-profile" role="tabpanel">
                                              <div class="row">
                                                  <div class="col-md mb-4 mb-md-0">
-                                                     <small class="text-light fw-semibold">Basic Accordion</small>
+                                                     <small class="text-light fw-semibold">Module List</small>
                                                      <div class="accordion mt-3" id="accordionExample">
 
                                                          @forelse($course_modules as $module)
@@ -110,12 +110,30 @@
                                                                              @forelse($module->files as $file)
 
                                                                              <ul>
+
+                                                                                 @if($file->a_flag == 1 AND $recommended == 'auditory')
+
+                                                                                 <span class="badge bg-label-success">Recommended</span>
+                                                                                 @elseif($file->k_flag == 1 AND $recommended == 'kinesthetic')
+                                                                                 <span class="badge bg-label-success">Recommended</span>
+
+                                                                                 @elseif($file->v_flag == 1 AND $recommended == 'visual')
+                                                                                 <span class="badge bg-label-success">Recommended</span>
+
+                                                                                 @elseif($file->r_flag == 1 AND $recommended == 'reading_and_Writing')
+                                                                                 <span class="badge bg-label-success">Recommended</span>
+
+                                                                                 @endif
+
+
                                                                                  @if($file->category == 'PDF')
                                                                                  <li>
+
                                                                                      <a target="_blank" href="{{ asset('uploads/attachments/' . $file->sys_file_name) }}">
                                                                                          <i class=" bx bxs-file-pdf me-1 text-danger fs-1"></i>
                                                                                          {{ $file->file_name }}
                                                                                      </a>
+
                                                                                  </li>
                                                                                  @elseif($file->category == 'VIDEO')
                                                                                  <li>

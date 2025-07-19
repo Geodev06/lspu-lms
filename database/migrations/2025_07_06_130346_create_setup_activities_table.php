@@ -25,6 +25,11 @@ return new class extends Migration
             $table->text('image')->nullable(true);
             $table->integer('ide_id')->nullable(1);
 
+            $table->integer('k_flag')->default(0);
+            $table->integer('a_flag')->default(0);
+            $table->integer('v_flag')->default(0);
+            $table->integer('r_flag')->default(0);
+
 
             $table->timestamps();
         });

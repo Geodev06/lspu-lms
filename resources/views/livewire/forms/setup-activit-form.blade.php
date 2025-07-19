@@ -155,6 +155,33 @@
                                     </select>
                                 </div>
                             </div>
+
+                            <div class="col-lg-12 mb-2">
+                                <label class="form-check-label" for="remember-me"> Modality Applied</label>
+
+                                <div class="mb-3 d-flex">
+                                    <div class="form-check mx-2">
+                                        <input class="form-check-input" wire:model="v_flag" {{ $v_flag == 1 ? 'checked' : '' }} type="checkbox" id="v_flag-me">
+                                        <label class="form-check-label" for="v_flag-me">Visual</label>
+                                    </div>
+
+                                    <div class="form-check mx-2">
+                                        <input class="form-check-input" wire:model="a_flag" {{ $a_flag == 1 ? 'checked' : '' }} type="checkbox" id="a_flag-me">
+                                        <label class="form-check-label" for="a_flag-me">Auditory</label>
+                                    </div>
+
+                                    <div class="form-check mx-2">
+                                        <input class="form-check-input" wire:model="r_flag" {{ $r_flag == 1 ? 'checked' : '' }} type="checkbox" id="r_flag-me">
+                                        <label class="form-check-label" for="r_flag-me">Reading and Writing</label>
+                                    </div>
+
+                                    <div class="form-check mx-2">
+                                        <input class="form-check-input" wire:model="k_flag" {{ $k_flag == 1 ? 'checked' : '' }} type="checkbox" id="k_flag-me">
+                                        <label class="form-check-label" for="k_flag-me">Kinesthetics</label>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="col-lg-12 mb-2">
                                 <div class="mb-3">
                                     <div class="form-check">

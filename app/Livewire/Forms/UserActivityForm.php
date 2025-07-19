@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\ModalityBandit;
+use App\Models\ParamModuleAttachment;
 use App\Models\SetupActivity;
 use App\Models\SetupActivityQuestion;
 use App\Models\UserActivitySubmission;
@@ -57,6 +59,7 @@ class UserActivityForm extends Component
 
             DB::beginTransaction();
 
+
             $main = [
                 'activity_id'   => $this->activity_id,
                 'course_name' => get_course_name($this->activity->course_id),
@@ -105,6 +108,24 @@ class UserActivityForm extends Component
                         'points' => $total_points,
                     ]
                 );
+            }
+
+
+
+
+            if (in_array($this->activity->type, [MULTIPLE_CHOICE, IDENTIFICATION])) {
+                $modalities = [
+                    'a_flag' => 'auditory',
+                    'k_flag' => 'kinesthetic',
+                    'r_flag' => 'reading_and_writing',
+                    'v_flag' => 'visual',
+                ];
+
+                foreach ($modalities as $flag => $modality) {
+                    if ($this->activity->$flag == 1) {
+                        $this->update_bandit(Auth::id(), $modality, $grade);
+                    }
+                }
             }
 
             $link = route('user_activity_response', [

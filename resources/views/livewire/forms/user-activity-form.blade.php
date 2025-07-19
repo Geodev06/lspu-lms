@@ -11,7 +11,7 @@
                  <div class="card">
                      <div class="card-header">
                          <a href="{{ route('user_view_course', encrypt($activity->course_id)) }}" class="btn rounded-pill float-end btn-secondary text-white">
-                             <span class="tf-icons bx bx-left-arrow-circle"></span> Back
+                             <span class="tf-icons bx bx-left-arrow-circle"></span> Go to course
                          </a>
                      </div>
                      <div class="card-body">

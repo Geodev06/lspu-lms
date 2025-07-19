@@ -95,7 +95,7 @@
                              <div class="col-lg-6 mb-2">
                                  <div class="mb-3">
                                      <div class="d-flex justify-content-between">
-                                         <label for="email" class="form-label">Choice A</label>
+                                         <label for="email" class="form-label">Choice B</label>
                                          @error('choice_b')
                                          <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                          @enderror
@@ -107,7 +107,7 @@
                              <div class="col-lg-6 mb-2">
                                  <div class="mb-3">
                                      <div class="d-flex justify-content-between">
-                                         <label for="email" class="form-label">Choice A</label>
+                                         <label for="email" class="form-label">Choice C</label>
                                          @error('choice_c')
                                          <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                          @enderror
@@ -119,7 +119,7 @@
                              <div class="col-lg-6 mb-2">
                                  <div class="mb-3">
                                      <div class="d-flex justify-content-between">
-                                         <label for="email" class="form-label">Choice A</label>
+                                         <label for="email" class="form-label">Choice D</label>
                                          @error('choice_d')
                                          <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                          @enderror

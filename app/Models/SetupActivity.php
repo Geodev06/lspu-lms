@@ -19,6 +19,12 @@ class SetupActivity extends Model
         'active_flag',
         'type',
         'image',
-        'ide_id'
+        'ide_id',
+
+        'a_flag',
+        'k_flag',
+        'v_flag',
+        'r_flag',
+
     ];
 }
