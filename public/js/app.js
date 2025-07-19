@@ -96,7 +96,6 @@ function createLineChart({
     });
 }
 
-
 function createBarChart({
     containerId = 'container',
     chartType = 'bar',
@@ -190,7 +189,6 @@ function createBarChart({
     });
 }
 
-
 function createColumnChart({
     containerId = 'container',
     chartType = 'column',
@@ -249,4 +247,73 @@ function createColumnChart({
         series: seriesData
     });
 }
+
+function createPieChart({
+    containerId,
+    chartTitle,
+    subtitleText,
+    subtitleLink,
+    tooltipSuffix,
+    panKey = 'shift',
+    chartType = 'pie',
+    data,
+    seriesName = 'Percentage',
+    colorByPoint = true
+}) {
+    Highcharts.chart(containerId, {
+        chart: {
+            type: chartType,
+            zooming: {
+                type: 'xy'
+            },
+            panning: {
+                enabled: true,
+                type: 'xy'
+            },
+            panKey: panKey
+        },
+        title: {
+            text: chartTitle
+        },
+        tooltip: {
+            valueSuffix: tooltipSuffix
+        },
+        subtitle: {
+            text: `Source:<a href="${subtitleLink}" target="_blank">${subtitleText}</a>`
+        },
+        plotOptions: {
+            pie: {
+                allowPointSelect: true,
+                cursor: 'pointer',
+                dataLabels: [
+                    {
+                        enabled: true,
+                        distance: 20
+                    },
+                    {
+                        enabled: true,
+                        distance: -40,
+                        format: '{point.percentage:.1f}%',
+                        style: {
+                            fontSize: '1.2em',
+                            textOutline: 'none',
+                            opacity: 0.7
+                        },
+                        filter: {
+                            operator: '>',
+                            property: 'percentage',
+                            value: 10
+                        }
+                    }
+                ]
+            }
+        },
+        series: [{
+            name: seriesName,
+            colorByPoint: colorByPoint,
+            data: data
+        }]
+    });
+}
+
 

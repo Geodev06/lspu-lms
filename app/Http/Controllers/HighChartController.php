@@ -112,4 +112,63 @@ class HighChartController extends Controller
             throw $th;
         }
     }
+
+    public function get_pie_1()
+    {
+        try {
+
+            $query = DB::select(
+                "
+                  SELECT 
+                    avg(A.grade) y, C.name from user_activity_submissions A
+                    JOIN users B ON B.id = A.created_by
+                    JOIN param_organizations C ON C.org_code = B.org_code
+                    GROUP BY C.name
+
+                "
+            );
+
+            return response()->json($query);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function get_pie_2()
+    {
+        try {
+
+            $query = DB::select(
+                "
+                SELECT 
+                    ROUND(AVG(auditory_score), 2) AS a,
+                    ROUND(AVG(visual_score), 2) AS v,
+                    ROUND(AVG(kinesthetic_score), 2) AS k,
+                    ROUND(AVG(reading_and_writing_score), 2) AS r
+                FROM modality_stats
+
+                "
+            );
+
+            return response()->json($query);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
+
+    public function get_bar_2()
+    {
+        try {
+
+            $query = DB::select(
+                "
+                    SELECT sum(successes) s, sum(failures) f, modality FROM modality_bandits group by modality order by modality
+                "
+            );
+
+            return response()->json($query);
+        } catch (\Throwable $th) {
+            throw $th;
+        }
+    }
 }

@@ -25,8 +25,7 @@ class UserCourses extends Component
 
     public function render()
     {
-        $courses = ParamLearningCourse::where('org_code', Auth::user()->org_code)
-            ->where('active_flag', 'Y')
+        $courses = ParamLearningCourse::where('active_flag', 'Y')
             ->when($this->search, function ($query) {
                 $query->where('title', 'like', '%' . $this->search . '%')
                     ->orWhere('course_code', 'like', '%' . $this->search . '%');

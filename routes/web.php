@@ -123,10 +123,22 @@ Route::controller(DatatableController::class)
 
 Route::controller(HighChartController::class)
     ->group(function () {
-        Route::get('/get_line_1', 'get_line_1')->name('get_line_1');
-        Route::get('/get_bar_1', 'get_bar_1')->name('get_bar_1');
 
+        // Admin
+        Route::get('/get_line_1', 'get_line_1')->name('get_line_1');
+        
+        Route::get('/get_bar_1', 'get_bar_1')->name('get_bar_1');
+        Route::get('/get_bar_2', 'get_bar_2')->name('get_bar_2');
+
+        Route::get('/get_pie_1', 'get_pie_1')->name('get_pie_1');
+        Route::get('/get_pie_2', 'get_pie_2')->name('get_pie_2');
+        // End Admin
+
+
+        // Teacher
         Route::get('/get_t_bar_1', 'get_t_bar_1')->name('get_t_bar_1');
+        // End Teacher
+
 
 
 

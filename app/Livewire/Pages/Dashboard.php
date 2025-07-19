@@ -76,6 +76,22 @@ class Dashboard extends Component
                 break;
 
             case ROLE_STUDENT:
+
+                $data = [
+                    'submission_count_today' => UserActivitySubmission::where('created_by', $user_id)->count(),
+                    'my_avg_grade' => round(
+                        UserActivitySubmission::where('created_by', $user_id)->avg('grade'),
+                        2
+                    ),
+                    'my_passing_rate' => UserActivitySubmission::where('created_by', $user_id)->count() > 0
+                        ? round(UserActivitySubmission::where('created_by', $user_id)->where('grade', '>=', 75)->count() / UserActivitySubmission::where('created_by', $user_id)->count(), 2)
+                        : 0,
+
+
+                    'notification_count' => Notification::where('receiver_id', Auth::user()->id)->where('seen_flag', 0)->count(),
+                    'my_submission_history' => UserActivitySubmission::where('created_by', $user_id)->paginate(10),
+
+                ];
                 break;
 
             default:

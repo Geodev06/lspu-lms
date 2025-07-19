@@ -336,7 +336,154 @@
     </div>
 </div>
 
-<div class="col-sm-6 col-xl-8  mb-3">
+
+<div class="col-sm-6 col-xl-4  mb-3" wire:ignore>
+    <div class="card">
+        <div class="card-body">
+            <figure class="highcharts-figure">
+                <div id="pie_1"></div>
+                <!-- <p class="highcharts-description">
+                    Basic line chart showing trends in a dataset. This chart includes the
+                    <code>series-label</code> module, which adds a label to each line for
+                    enhanced readability.
+                </p> -->
+            </figure>
+
+            <script>
+                $.get('/get_pie_1', function(sqlResults) {
+                    console.log(sqlResults);
+
+                    const chartData = sqlResults.map(result => ({
+                        ...result,
+                        y: parseFloat(result.y)
+                    }));
+
+                    createPieChart({
+                        containerId: 'pie_1',
+                        chartTitle: 'Avg Grade per Organizations',
+                        subtitleText: 'LSPU-LMS',
+                        subtitleLink: '',
+                        tooltipSuffix: '%',
+                        data: chartData
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-6 col-xl-4  mb-3" wire:ignore>
+    <div class="card">
+        <div class="card-body">
+            <figure class="highcharts-figure">
+                <div id="pie_2"></div>
+                <!-- <p class="highcharts-description">
+                    Basic line chart showing trends in a dataset. This chart includes the
+                    <code>series-label</code> module, which adds a label to each line for
+                    enhanced readability.
+                </p> -->
+            </figure>
+
+            <script>
+                $.get('/get_pie_2', function(sqlResults) {
+                    console.log(sqlResults);
+
+                    var chartData = [{
+                            name: 'Auditory',
+                            y: parseFloat(sqlResults[0].a)
+                        },
+                        {
+                            name: 'Kinesthetics',
+                            y: parseFloat(sqlResults[0].k)
+                        },
+                        {
+                            name: 'Reading and Writing',
+                            y: parseFloat(sqlResults[0].r)
+                        },
+                        {
+                            name: 'Visual',
+                            y: parseFloat(sqlResults[0].v)
+                        }
+                    ]
+
+
+
+                    createPieChart({
+                        containerId: 'pie_2',
+                        chartTitle: 'Avg Modality Score (INITIAL ASSESSMENT)',
+                        subtitleText: 'LSPU-LMS',
+                        subtitleLink: '',
+                        tooltipSuffix: '%',
+                        data: chartData
+                    });
+                });
+            </script>
+        </div>
+    </div>
+</div>
+
+<div class="col-sm-6 col-xl-4  mb-3" wire:ignore>
+    <div class="card">
+        <div class="card-body">
+
+
+            <figure class="highcharts-figure">
+                <div id="bar_2"></div>
+                <!-- <p class="highcharts-description">
+                    Basic line chart showing trends in a dataset. This chart includes the
+                    <code>series-label</code> module, which adds a label to each line for
+                    enhanced readability.
+                </p> -->
+            </figure>
+
+            <script>
+                $.get('/get_bar_2', function(sqlResults) {
+
+                    // Convert to float and log results
+                    const parsedResults = sqlResults.map(item => ({
+                        type: item.modality,
+                        success: parseFloat(item.s),
+                        failure: parseFloat(item.f)
+                    }));
+
+                    const xAxisCategories = parsedResults.map(item => item.type);
+                    const successData = parsedResults.map(item => item.success);
+                    const failureData = parsedResults.map(item => item.failure);
+
+
+
+
+                    createColumnChart({
+                        containerId: 'bar_2',
+                        chartType: 'column',
+                        titleText: 'Sum of Bandits in the system per modality',
+                        subtitleText: 'Source: system',
+                        xAxisCategories: xAxisCategories,
+                        xAxisAccessibilityDescription: 'Learning Styles',
+                        yAxisMin: 0,
+                        yAxisTitleText: 'Score',
+                        tooltipValueSuffix: '',
+                        columnPointPadding: 0.2,
+                        columnBorderWidth: 0,
+                        seriesData: [{
+                                name: 'Successes',
+                                data: successData
+                            },
+                            {
+                                name: 'Failures',
+                                data: failureData
+                            }
+                        ]
+                    });
+
+                })
+            </script>
+        </div>
+    </div>
+</div>
+
+
+<div class="col-sm-6 col-xl-12   mb-3">
     <div class="card">
         <div class="card-body">
             <span class="text-heading">Submissions history</span>
