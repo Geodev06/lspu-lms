@@ -24,6 +24,11 @@ class Login extends Component
         ]);
 
         if (Auth::attempt($credentials, $this->remember)) {
+
+            if (!Auth::user()->email_verified_at) {
+                Auth::user()->sendEmailVerificationNotification();
+            }
+
             $this->redirect('/dashboard');
         } else {
             session()->flash('error', 'Invalid Institutional Email or Password.');

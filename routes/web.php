@@ -1,9 +1,12 @@
 <?php
 
 use App\Http\Controllers\DatatableController;
+use App\Http\Controllers\EmailController;
 use App\Http\Controllers\HighChartController;
+use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
 use App\Livewire\Auth\Register;
+use App\Livewire\Auth\ResetPasword;
 use App\Livewire\Forms\LearningCourseForm;
 use App\Livewire\Forms\LearningModuleForm;
 use App\Livewire\Forms\ModuleAttachmentForm;
@@ -13,6 +16,8 @@ use App\Livewire\Forms\SetupActivitForm;
 use App\Livewire\Forms\SetupQuestionForm;
 use App\Livewire\Forms\UserActivityForm;
 use App\Livewire\Forms\UserForm;
+use App\Livewire\Pages\AccountSetting;
+use App\Livewire\Pages\ChatPage;
 use App\Livewire\Pages\Dashboard;
 use App\Livewire\Pages\ManageActivity;
 use App\Livewire\Pages\ManageLearningCourses;
@@ -24,8 +29,9 @@ use App\Livewire\Pages\UserActivity;
 use App\Livewire\Pages\UserActivityResponse;
 use App\Livewire\Pages\UserCourses;
 use App\Livewire\Pages\Users;
+use App\Livewire\Pages\VerificationNotice;
 use App\Livewire\Pages\ViewCourse;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -39,14 +45,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
+
 Route::prefix('/')->group(function () {
     Route::get('/', Login::class)->name('login');
     Route::get('register', Register::class)->name('register');
+    Route::get('fogot_password', ForgotPassword::class)->name('forgot_password');
+
+    Route::get('/reset-password/{token}', ResetPasword::class)->name('password.reset');
+
 })->middleware('guest');
 
-Route::middleware(['auth', 'cfs'])->group(function () {
-
-
+Route::middleware(['auth', 'cfs', 'verified.custom'])->group(function () {
 
     // student
     Route::get('/courses', UserCourses::class)->name('user_courses');
@@ -56,12 +65,17 @@ Route::middleware(['auth', 'cfs'])->group(function () {
 
 
     // System admin and teacher
-    Route::get('/dashboard', Dashboard::class)->name('dashboard');
+    Route::get('/dashboard', Dashboard::class)->name('dashboard')->middleware('verified');
+
     Route::get('/manage/learning-course', ManageLearningCourses::class)->name('manage_learning_course');
     Route::get('/manage/manage-activity', ManageActivity::class)->name('manage_activity');
 
     // Account
     Route::get('/account/notifications', NotificationPage::class)->name('notification_page');
+    Route::get('/account/setting', AccountSetting::class)->name('account_setting_page');
+    Route::get('/account/chats', ChatPage::class)->name('chats');
+
+
 
 
 
@@ -72,11 +86,11 @@ Route::middleware(['auth', 'cfs'])->group(function () {
     Route::get('/system-administration/sections', Sections::class)->name('sections');
 });
 
-Route::get('/take-survey', Survey::class)->name('survey');
+Route::get('/take-survey', Survey::class)->name('survey')->middleware('auth');
 
 
 // Forms
-Route::middleware(['auth', 'cfs'])->group(function () {
+Route::middleware(['auth', 'cfs', 'verified'])->group(function () {
 
 
     // Management
@@ -103,6 +117,7 @@ Route::middleware(['auth', 'cfs'])->group(function () {
 
 Route::controller(DatatableController::class)
     ->name('datatable.')
+    ->middleware(['auth', 'verified'])
     ->group(function () {
         Route::get('/table_users', 'table_users')->name('users');
         Route::get('/table_organizations', 'table_organizations')->name('organizations');
@@ -122,11 +137,12 @@ Route::controller(DatatableController::class)
     });
 
 Route::controller(HighChartController::class)
+    ->middleware('auth')
     ->group(function () {
 
         // Admin
         Route::get('/get_line_1', 'get_line_1')->name('get_line_1');
-        
+
         Route::get('/get_bar_1', 'get_bar_1')->name('get_bar_1');
         Route::get('/get_bar_2', 'get_bar_2')->name('get_bar_2');
 
@@ -134,13 +150,20 @@ Route::controller(HighChartController::class)
         Route::get('/get_pie_2', 'get_pie_2')->name('get_pie_2');
         // End Admin
 
-
         // Teacher
         Route::get('/get_t_bar_1', 'get_t_bar_1')->name('get_t_bar_1');
         // End Teacher
-
-
-
-
-      
     });
+
+Route::controller(EmailController::class)->middleware('auth')->group(function () {
+    Route::get('/email/verify', 'showNotice')
+        ->name('verification.notice');
+
+    Route::get('/email/verify/{id}/{hash}', 'verify')
+        ->middleware('signed')
+        ->name('verification.verify');
+
+    Route::post('/email/verification-notification', 'resend')
+        ->middleware('throttle:3,1')
+        ->name('verification.send');
+});

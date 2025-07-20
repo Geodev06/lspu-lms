@@ -108,20 +108,26 @@
             <span class="menu-header-text">Pages</span>
         </li>
 
-        <li class="menu-item {{ str_contains(url()->current(), 'setting') ? 'active' : '' }}">
+        <li class="menu-item {{ str_contains(url()->current(), 'account') ? 'active' : '' }}">
             <a href="javascript:void(0);" class="menu-link menu-toggle">
                 <i class="menu-icon tf-icons bx bx-dock-top"></i>
                 <div data-i18n="Account Settings">Account Settings</div>
             </a>
             <ul class="menu-sub">
                 <li class="menu-item">
-                    <a href="" class="menu-link">
+                    <a href="{{ route('account_setting_page') }}" class="menu-link">
                         <div data-i18n="Account">Account</div>
                     </a>
                 </li>
                 <li class="menu-item">
                     <a href="{{ route('notification_page') }}" class="menu-link">
                         <div data-i18n="Notifications">Notifications</div>
+                    </a>
+                </li>
+
+                <li class="menu-item">
+                    <a href="{{ route('chats') }}" class="menu-link">
+                        <div data-i18n="Notifications">Chats</div>
                     </a>
                 </li>
 

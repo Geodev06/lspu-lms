@@ -43,7 +43,7 @@
                         <div class="dropdown-header d-flex justify-content-between align-items-center p-3">
                             <h6 class="mb-0">Notifications</h6>
                             <div class="d-flex align-items-center gap-2">
-                                <span class="badge bg-primary">1 New</span>
+                                <span class="badge bg-primary"></span>
                                 <a href="javascript:void(0)" class="text-muted" data-bs-toggle="tooltip" title="Mark all as read">
                                     <i class="bx bx-envelope-open"></i>
                                 </a>

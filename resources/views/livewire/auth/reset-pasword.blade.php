@@ -8,26 +8,18 @@
                 </a>
             </div>
             <!-- /Logo -->
-            <h4 class="mb-2">Welcome to LMS!</h4>
-            <p class="mb-4">Please sign-in to your account and start learning.</p>
+            <h4 class="mb-2">Reset Password</h4>
+            <p class="mb-4">Please enter your new password.</p>
 
-            @if(session('success'))
+            @if(session('status'))
             <x-message-alert type="success" message="{{ session('success') }}" />
             @endif
 
-            @if(session('error'))
-            <x-message-alert type="danger" message="{{ session('error') }}" />
-            @endif
+            <form id="formAuthentication" class="mb-3" action="#" method="POST">
 
-            <form id="formAuthentication" class="mb-3" action="index.html" method="POST">
+                <x-message-alert type="dark" message="Enter new password for {{ $email }}" />
 
-                @error('email')
-                <label for="" class="form-label text-danger form-error">{{ $message }}</label>
-                @enderror
-                <div class="mb-3">
-                    <label for="email" class="form-label">Institutional Email</label>
-                    <input type="text" wire:model="email" class="form-control" id="email" name="email-username" placeholder="Enter your email or username" autofocus="">
-                </div>
+
                 @error('password')
                 <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                 @enderror
@@ -43,12 +35,7 @@
                         <span class="input-group-text cursor-pointer"><i class="bx bx-hide"></i></span>
                     </div>
                 </div>
-                <div class="mb-3">
-                    <div class="form-check">
-                        <input class="form-check-input" wire:model="remember" type="checkbox" id="remember-me">
-                        <label class="form-check-label" for="remember-me"> Remember Me </label>
-                    </div>
-                </div>
+
                 <div class="mb-3">
                     <button
                         class="btn btn-primary d-grid w-100"
@@ -56,21 +43,16 @@
                         wire:loading.attr="disabled"
                         wire:target="submit"
                         type="submit">
-                        <span wire:loading.remove wire:target="submit">Sign In</span>
+                        <span wire:loading.remove wire:target="submit">Change Password</span>
                         <span wire:loading wire:target="submit">
                             <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                            Signing In ...
+                            Saving ...
                         </span>
                     </button>
                 </div>
             </form>
 
-            <p class="text-center">
-                <span>New on our platform?</span>
-                <a href="{{ route('register') }}">
-                    <span>Create an account</span>
-                </a>
-            </p>
+
         </div>
     </div>
 </div>
