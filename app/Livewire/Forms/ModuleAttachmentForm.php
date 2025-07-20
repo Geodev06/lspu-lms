@@ -82,11 +82,9 @@ class ModuleAttachmentForm extends Component
             $this->file = $this->record->file;
             $this->category = $this->record->category;
             $this->kinesthetic = $this->record->k_flag;
-
         } else {
 
             $this->category = F_PDF;
-
         }
     }
 
@@ -95,46 +93,8 @@ class ModuleAttachmentForm extends Component
     {
 
         $this->check_action();
-        
-        $rules = [
-            'file' => 'required|file|max:5120', // 5MB = 5120 KB
-        ];
 
-        switch ($this->category) {
-            case F_PDF:
-                $rules = [
-                    'file' => 'required|file|mimes:pdf|max:5120', // 5MB
-                ];
-                break;
-
-            case F_AUDIO:
-                $rules = [
-                    'file' => 'required|file|mimes:mp3,wav,ogg,m4a|max:8120',
-                ];
-                break;
-
-            case F_VIDEO:
-                $rules = [
-                    'file' => 'required|file|mimes:mp4,mov,avi,wmv,flv,mkv|max:10120',
-                ];
-                break;
-
-            case F_IMAGE:
-                $rules = [
-                    'file' => 'required|file|mimes:jpeg,jpg,png,gif,webp|max:5120',
-                ];
-                break;
-
-            case F_LINK:
-                $rules = [
-                    'file' => 'required|max:20000',
-                ];
-                break;
-
-            default:
-                throw new Exception('Invalid File Type');
-        }
-
+        $rules = [];
         $messages = [
             'file.required' => 'The file field is required.',
             'file.file' => 'The file must be a valid file.',
@@ -142,6 +102,32 @@ class ModuleAttachmentForm extends Component
             'file.url' => 'The file must be a valid URL.',
             'file.max' => 'The file must not be greater than :max kilobytes.',
         ];
+
+        switch ($this->category) {
+            case F_PDF:
+                $rules['file'] = 'required|file|mimes:pdf|max:5120';
+                break;
+
+            case F_AUDIO:
+                $rules['file'] = 'required|file|mimes:mp3,wav,ogg,m4a|max:8120';
+                break;
+
+            case F_VIDEO:
+                $rules['file'] = 'required|file|mimes:mp4,mov,avi,wmv,flv,mkv|max:10120';
+                break;
+
+            case F_IMAGE:
+                $rules['file'] = 'required|file|mimes:jpeg,jpg,png,gif,webp|max:5120';
+                break;
+
+            case F_LINK:
+                $rules['file'] = 'required|string|url|max:2000';
+                $messages['file.url'] = 'The file must be a valid URL.';
+                break;
+
+            default:
+                throw new Exception('Invalid File Type');
+        }
 
         $this->validate($rules, $messages);
 
@@ -164,7 +150,6 @@ class ModuleAttachmentForm extends Component
 
                 $data['file_name']     = $this->file;
                 $data['sys_file_name'] = $this->file;
-
             } elseif ($this->file instanceof \Illuminate\Http\UploadedFile) {
 
                 $extension = $this->file->getClientOriginalExtension();
@@ -200,7 +185,6 @@ class ModuleAttachmentForm extends Component
                 ParamModuleAttachment::find(decrypt($this->attachment_id))->update($data);
 
                 session()->flash('success', 'Record has been successfully updated.');
-
             } else {
 
                 ParamModuleAttachment::create($data);
@@ -216,7 +200,6 @@ class ModuleAttachmentForm extends Component
 
 
             DB::commit();
-
         } catch (\Throwable $th) {
 
             Log::error($th->getMessage());

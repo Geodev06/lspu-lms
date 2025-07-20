@@ -80,7 +80,7 @@
                                         <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                         @enderror
                                     </div>
-                                    <select wire:model.live="category" id="defaultSelect" class="form-select">
+                                    <select wire:model="category" id="defaultSelect" class="form-select">
                                         <option value="PDF">PDF</option>
                                         <option value="VIDEO">VIDEO</option>
                                         <option value="AUDIO">AUDIO</option>
@@ -96,6 +96,16 @@
                             <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                             @enderror
 
+
+                            <!-- Loading Spinner -->
+                            <div wire:loading wire:target="file">
+                                <p>File Getting ready to upload ... Please wait.</p>
+                                {{-- Optional: Replace with a spinner --}}
+                                <div class="spinner-border spinner-border-lg text-primary" role="status">
+                                    <span class="visually-hidden">Loading...</span>
+                                </div>
+                            </div>
+
                             @if(in_array($category, [F_PDF, F_VIDEO, F_AUDIO, F_IMAGE]))
                             <div class="col-lg-12 mb-2">
                                 <div class="mb-3">
@@ -105,7 +115,9 @@
                                     <input
                                         class="form-control"
                                         type="file"
-                                        wire:model="file"
+                                        wire:loading.attr="disabled"
+                                                wire:target="file"
+                                        wire:model.live="file"
                                         id="formFile"
                                         @if($category==F_PDF) accept=".pdf"
                                         @elseif($category==F_VIDEO) accept="video/mkv*"
@@ -121,7 +133,7 @@
                                     <div class="d-flex justify-content-between">
                                         <label for="linkInput" class="form-label">Link (paste here)</label>
                                     </div>
-                                    <input type="text" wire:model="file" class="form-control" id="linkInput" name="file" placeholder="Enter your Link" autofocus>
+                                    <input type="text" wire:model="file"  class="form-control" id="linkInput" name="file" placeholder="Enter your Link" autofocus>
                                 </div>
                             </div>
                             @endif
@@ -167,8 +179,12 @@
                                             <button
                                                 class="btn btn-primary d-grid w-100"
                                                 wire:click.prevent="process"
+
                                                 wire:loading.attr="disabled"
-                                                wire:target="process"
+                                                wire:target="file"
+
+
+
                                                 type="submit">
                                                 <span wire:loading.remove wire:target="process">Submit</span>
                                                 <span wire:loading wire:target="process">
