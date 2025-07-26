@@ -11,12 +11,12 @@ use Livewire\Component;
 class AccountSetting extends Component
 {
 
-    public string $old_password = '';
-    public string $password = '';
-    public string $password_confirmation = '';
+    public  $old_password = '';
+    public  $password = '';
+    public  $password_confirmation = '';
 
 
-    public string $first_name, $last_name, $middle_name, $name_ext;
+    public  $first_name, $last_name, $middle_name, $name_ext;
     public $email, $profile, $sex, $student_no;
 
 

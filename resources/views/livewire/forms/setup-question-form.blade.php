@@ -53,11 +53,16 @@
                              </div>
                              <div class="col-lg-4 mb-2">
                                  <div class="mb-3">
+
+
                                      <div class="d-flex justify-content-between">
                                          <label for="email" class="form-label">Image (optional)</label>
                                          @error('image')
                                          <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                          @enderror
+                                         <div wire:loading wire:target="image">
+                                             <p class="text-success">File Getting ready to upload ... Please wait.</p>
+                                         </div>
                                      </div>
                                      <input class="form-control" type="file" wire:model="image" id="image">
                                  </div>
@@ -80,6 +85,9 @@
                              </div>
 
                              @if($activity->type == MULTIPLE_CHOICE)
+
+
+
                              <div class="col-lg-6 mb-2">
                                  <div class="mb-3">
                                      <div class="d-flex justify-content-between">
@@ -87,8 +95,19 @@
                                          @error('choice_a')
                                          <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                          @enderror
+                                         <div wire:loading wire:target="image_a">
+                                             <p class="text-success">File Getting ready to upload ... Please wait.</p>
+                                         </div>
                                      </div>
                                      <input type="text" wire:model="choice_a" class="form-control" id="x" name="email-username" placeholder="Enter Value" autofocus="">
+                                     @if($id)
+                                     <div class="custom-file-upload">
+                                         <input class="form-control" type="file" wire:model="image_a" id="image_a" accept="image/*">
+                                         @if($image_a)
+                                         <img src="{{ asset('uploads/question_attachments/'. $image_a) }}" alt="" srcset="" style="max-height: 100px; max-width: 100px;">
+                                         @endif
+                                     </div>
+                                     @endif
                                  </div>
                              </div>
 
@@ -99,8 +118,20 @@
                                          @error('choice_b')
                                          <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                          @enderror
+                                         <div wire:loading wire:target="image_b">
+                                             <p class="text-success">File Getting ready to upload ... Please wait.</p>
+                                         </div>
                                      </div>
                                      <input type="text" wire:model="choice_b" class="form-control" id="x" name="email-username" placeholder="Enter Value" autofocus="">
+                                     @if($id)
+                                     <div class="custom-file-upload">
+
+                                         <input class="form-control" type="file" wire:model="image_b" id="image_b" accept="image/*">
+                                         @if($image_b)
+                                         <img src="{{ asset('uploads/question_attachments/'. $image_b) }}" alt="" srcset="" style="max-height: 100px; max-width: 100px;">
+                                         @endif
+                                     </div>
+                                     @endif
                                  </div>
                              </div>
 
@@ -111,8 +142,20 @@
                                          @error('choice_c')
                                          <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                          @enderror
+                                         <div wire:loading wire:target="image_c">
+                                             <p class="text-success">File Getting ready to upload ... Please wait.</p>
+                                         </div>
                                      </div>
                                      <input type="text" wire:model="choice_c" class="form-control" id="x" name="email-username" placeholder="Enter Value" autofocus="">
+                                     @if($id)
+                                     <div class="custom-file-upload">
+
+                                         <input class="form-control" type="file" wire:model="image_c" id="image_c" accept="image/*">
+                                         @if($image_c)
+                                         <img src="{{ asset('uploads/question_attachments/'. $image_c) }}" alt="" srcset="" style="max-height: 100px; max-width: 100px;">
+                                         @endif
+                                     </div>
+                                     @endif
                                  </div>
                              </div>
 
@@ -123,8 +166,19 @@
                                          @error('choice_d')
                                          <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                          @enderror
+                                         <div wire:loading wire:target="image_d">
+                                             <p class="text-success">File Getting ready to upload ... Please wait.</p>
+                                         </div>
                                      </div>
                                      <input type="text" wire:model="choice_d" class="form-control" id="x" name="email-username" placeholder="Enter Value" autofocus="">
+                                     @if($id)
+                                     <div class="custom-file-upload">
+                                         <input class="form-control" type="file" wire:model="image_d" id="image_d" accept="image/*">
+                                         @if($image_d)
+                                         <img src="{{ asset('uploads/question_attachments/'. $image_d) }}" alt="" srcset="" style="max-height: 100px; max-width: 100px;">
+                                         @endif
+                                     </div>
+                                     @endif
                                  </div>
                              </div>
 
@@ -257,10 +311,30 @@
                              @if($activity->type == MULTIPLE_CHOICE)
                              <div class="col-lg-12 mb-2">
                                  <ul class="list-group fw-bold">
-                                     <li class="list-group-item">A : {{ $choice_a }}</li>
-                                     <li class="list-group-item">B : {{ $choice_b }}</li>
-                                     <li class="list-group-item">C : {{ $choice_c }}</li>
-                                     <li class="list-group-item">D : {{ $choice_d }}</li>
+                                     <li class="list-group-item">A : {{ $choice_a }}
+                                         @if($image_a)
+                                         <br>
+                                         <img src="{{ asset('uploads/question_attachments/'. $image_a) }}" alt="" class="mb-2" srcset="" style="max-height: 100px; max-width: 100px;">
+                                         @endif
+                                     </li>
+                                     <li class="list-group-item">B : {{ $choice_b }}
+                                         @if($image_b)
+                                         <br>
+                                         <img src="{{ asset('uploads/question_attachments/'. $image_b) }}" alt="" class="mb-2" srcset="" style="max-height: 100px; max-width: 100px;">
+                                         @endif
+                                     </li>
+                                     <li class="list-group-item">C : {{ $choice_c }}
+                                         @if($image_c)
+                                         <br>
+                                         <img src="{{ asset('uploads/question_attachments/'. $image_c) }}" alt="" class="mb-2" srcset="" style="max-height: 100px; max-width: 100px;">
+                                         @endif
+                                     </li>
+                                     <li class="list-group-item">D : {{ $choice_d }}
+                                         @if($image_d)
+                                         <br>
+                                         <img src="{{ asset('uploads/question_attachments/'. $image_d) }}" alt="" class="mb-2" srcset="" style="max-height: 100px; max-width: 100px;">
+                                         @endif
+                                     </li>
                                  </ul>
 
                              </div>

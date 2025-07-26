@@ -98,7 +98,14 @@
                                  </div>
                                  <div class="bg-dark p-4 text-white" style="border-radius: 20px;">
                                      {{ $item->answer }}
+
+                                     @if($item->image)
+                                     <br>
+                                     <img src="{{ asset('uploads/answer_files/'. $item->image) }}" class="mt-2 mb-2" style="max-height: 100%; max-width: 100%;">
+                                     @endif
                                  </div>
+
+
                              </div>
                              @endforeach
 

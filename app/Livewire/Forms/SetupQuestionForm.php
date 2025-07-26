@@ -14,6 +14,7 @@ use Livewire\Attributes\Title;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use Illuminate\Support\Str;
+use Symfony\Component\Console\Question\ChoiceQuestion;
 
 class SetupQuestionForm extends Component
 {
@@ -36,6 +37,8 @@ class SetupQuestionForm extends Component
 
 
     public $choice_a, $choice_b, $choice_c, $choice_d;
+    public $image_a, $image_b, $image_c, $image_d;
+
 
 
     function areChoicesUnique($a, $b, $c, $d)
@@ -71,9 +74,57 @@ class SetupQuestionForm extends Component
                 $this->choice_b = SetupQuestionChoice::where('question_id', $this->id)->where('key', 'B')->first()['choice'] ?? null;
                 $this->choice_c = SetupQuestionChoice::where('question_id', $this->id)->where('key', 'C')->first()['choice'] ?? null;
                 $this->choice_d = SetupQuestionChoice::where('question_id', $this->id)->where('key', 'D')->first()['choice'] ?? null;
+
+                $this->image_a = SetupQuestionChoice::where('question_id', $this->id)->where('key', 'A')->first()['image'] ?? null;
+                $this->image_b = SetupQuestionChoice::where('question_id', $this->id)->where('key', 'B')->first()['image'] ?? null;
+                $this->image_c = SetupQuestionChoice::where('question_id', $this->id)->where('key', 'C')->first()['image'] ?? null;
+                $this->image_d = SetupQuestionChoice::where('question_id', $this->id)->where('key', 'D')->first()['image'] ?? null;
             }
         }
     }
+
+    public function updated($property)
+    {
+        if ($property === 'image_a') {
+            $this->handleFileUpload($property, 'A');
+        }
+
+        if ($property === 'image_b') {
+            $this->handleFileUpload($property, 'B');
+        }
+
+        if ($property === 'image_c') {
+            $this->handleFileUpload($property, 'C');
+        }
+
+        if ($property === 'image_d') {
+            $this->handleFileUpload($property, 'D');
+        }
+    }
+
+
+    protected function handleFileUpload($property, $key = null)
+    {
+        $file = $this->{$property};
+
+        if ($file instanceof \Illuminate\Http\UploadedFile) {
+            $extension = $file->getClientOriginalExtension();
+            $filename  = Str::random(20) . '.' . $extension;
+            $file->storeAs('question_attachments', $filename, 'public_path');
+        }
+
+        if ($file and $this->id) {
+            $this->validateOnly($property, [
+                $property => 'image|max:11024', // ~11MB max
+            ]);
+
+            SetupQuestionChoice::where('question_id', $this->id)
+                ->where('key', $key)
+                ->update(['image' => $filename]);
+            $this->{$property} = $filename;
+        }
+    }
+
 
 
     #[On('update_textarea_value')]
@@ -90,7 +141,7 @@ class SetupQuestionForm extends Component
 
             'question' => 'required|string|max:20000',
             'answer' => 'nullable|max:20000',
-            'image' => 'nullable|image|max:5120',
+            'image' => 'nullable|image|max:10120',
             'points' => ['required', 'regex:/^\d+(\.\d)?$/', 'max:50', 'numeric'],
             'choice_a' => 'nullable',
             'choice_b' => 'nullable',
@@ -154,12 +205,27 @@ class SetupQuestionForm extends Component
 
                 if ($this->activity->type == MULTIPLE_CHOICE) {
 
-                    SetupQuestionChoice::where('question_id', $this->id)->delete();
+                    // SetupQuestionChoice::where('question_id', $this->id)->delete();
 
-                    $this->insert_choice($this->id, 'A', $this->choice_a);
-                    $this->insert_choice($this->id, 'B', $this->choice_b);
-                    $this->insert_choice($this->id, 'C', $this->choice_c);
-                    $this->insert_choice($this->id, 'D', $this->choice_d);
+                    SetupQuestionChoice::where('question_id', $this->id)
+                        ->where('key', 'A')
+                        ->update(['choice' => $this->choice_a]);
+                    SetupQuestionChoice::where('question_id', $this->id)
+                        ->where('key', 'B')
+                        ->update(['choice' => $this->choice_b]);
+
+                    SetupQuestionChoice::where('question_id', $this->id)
+                        ->where('key', 'C')
+                        ->update(['choice' => $this->choice_c]);
+
+                    SetupQuestionChoice::where('question_id', $this->id)
+                        ->where('key', 'D')
+                        ->update(['choice' => $this->choice_d]);
+
+                    // $this->insert_choice($this->id, 'A', $this->choice_a);
+                    // $this->insert_choice($this->id, 'B', $this->choice_b);
+                    // $this->insert_choice($this->id, 'C', $this->choice_c);
+                    // $this->insert_choice($this->id, 'D', $this->choice_d);
                 }
 
                 session()->flash('success', 'Question has been successfully updated.');

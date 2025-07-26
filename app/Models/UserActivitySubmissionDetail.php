@@ -15,6 +15,7 @@ class UserActivitySubmissionDetail extends Model
         'answer',
         'correct_answer',
         'points',
-        'max_points'
+        'max_points',
+        'image'
     ];
 }

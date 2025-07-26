@@ -104,97 +104,114 @@
                                 <div class="spinner-border spinner-border-lg text-primary" role="status">
                                     <span class="visually-hidden">Loading...</span>
                                 </div>
+
+
+
                             </div>
 
-                            @if(in_array($category, [F_PDF, F_VIDEO, F_AUDIO, F_IMAGE]))
-                            <div class="col-lg-12 mb-2">
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between">
-                                        <label for="formFile" class="form-label">Attachment</label>
-                                    </div>
-                                    <input
-                                        class="form-control"
-                                        type="file"
-                                        wire:loading.attr="disabled"
-                                                wire:target="file"
-                                        wire:model.live="file"
-                                        id="formFile"
-                                        @if($category==F_PDF) accept=".pdf"
-                                        @elseif($category==F_VIDEO) accept="video/mkv*"
-                                        @elseif($category==F_AUDIO) accept="audio/*"
-                                        @elseif($category==F_IMAGE) accept="image/*"
-                                        @endif>
+                            <div
+                                x-data="{ uploading: false, progress: 0 }"
+                                x-on:livewire-upload-start="uploading = true"
+                                x-on:livewire-upload-finish="uploading = false"
+                                x-on:livewire-upload-cancel="uploading = false"
+                                x-on:livewire-upload-error="uploading = false"
+                                x-on:livewire-upload-progress="progress = $event.detail.progress">
+                                <!-- File Input -->
+
+                                <!-- Progress Bar -->
+                                <div x-show="uploading">
+                                    <progress max="100" x-bind:value="progress"></progress>
                                 </div>
-                            </div>
 
-                            @elseif($category == F_LINK)
-                            <div class="col-lg-12 mb-2">
-                                <div class="mb-3">
-                                    <div class="d-flex justify-content-between">
-                                        <label for="linkInput" class="form-label">Link (paste here)</label>
-                                    </div>
-                                    <input type="text" wire:model="file"  class="form-control" id="linkInput" name="file" placeholder="Enter your Link" autofocus>
-                                </div>
-                            </div>
-                            @endif
-
-                            <div class="col-lg-12">
-                                <div class="mb-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" wire:model="kinesthetic" value="1" type="checkbox" id="kinesthetic-me">
-                                        <label class="form-check-label" for="kinesthetic-me">Applied Kinesthetic ? </label>
+                                @if(in_array($category, [F_PDF, F_VIDEO, F_AUDIO, F_IMAGE]))
+                                <div class="col-lg-12 mb-2">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <label for="formFile" class="form-label">Attachment</label>
+                                        </div>
+                                        <input
+                                            class="form-control"
+                                            type="file"
+                                            wire:loading.attr="disabled"
+                                            wire:target="file"
+                                            wire:model.live="file"
+                                            id="formFile"
+                                            @if($category==F_PDF) accept=".pdf"
+                                            @elseif($category==F_VIDEO) accept="video/mkv*"
+                                            @elseif($category==F_AUDIO) accept="audio/*"
+                                            @elseif($category==F_IMAGE) accept="image/*"
+                                            @endif>
                                     </div>
                                 </div>
-                            </div>
 
+                                @elseif($category == F_LINK)
+                                <div class="col-lg-12 mb-2">
+                                    <div class="mb-3">
+                                        <div class="d-flex justify-content-between">
+                                            <label for="linkInput" class="form-label">Link (paste here)</label>
+                                        </div>
+                                        <input type="text" wire:model="file" class="form-control" id="linkInput" name="file" placeholder="Enter your Link" autofocus>
+                                    </div>
+                                </div>
+                                @endif
 
-
-
-                            <div class="col-lg-12 mb-2">
-                                <div class="mb-3">
-                                    <b class="text-success"> {{ $record->file_name ?? '' }} </b>
+                                <div class="col-lg-12">
+                                    <div class="mb-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" wire:model="kinesthetic" value="1" type="checkbox" id="kinesthetic-me">
+                                            <label class="form-check-label" for="kinesthetic-me">Applied Kinesthetic ? </label>
+                                        </div>
+                                    </div>
                                 </div>
 
 
 
 
                                 <div class="col-lg-12 mb-2">
-                                    <div class="mb-3 float-end">
-                                        <div class="d-flex">
-
-                                            @if($attachment_id)
-                                            <button
-                                                class="btn btn-danger mx-2 d-grid w-100"
-                                                wire:click.prevent="delete"
-                                                wire:loading.attr="disabled"
-                                                wire:target="delete"
-                                                type="submit">
-                                                <span wire:loading.remove wire:target="delete">Delete</span>
-                                                <span wire:loading wire:target="delete">
-                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    Deleting ...
-                                                </span>
-                                            </button>
-                                            @endif
-                                            <button
-                                                class="btn btn-primary d-grid w-100"
-                                                wire:click.prevent="process"
-
-                                                wire:loading.attr="disabled"
-                                                wire:target="file"
+                                    <div class="mb-3">
+                                        <b class="text-success"> {{ $record->file_name ?? '' }} </b>
+                                    </div>
 
 
 
-                                                type="submit">
-                                                <span wire:loading.remove wire:target="process">Submit</span>
-                                                <span wire:loading wire:target="process">
-                                                    <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
-                                                    Submitting form ...
-                                                </span>
-                                            </button>
+
+                                    <div class="col-lg-12 mb-2">
+                                        <div class="mb-3 float-end">
+                                            <div class="d-flex">
+
+                                                @if($attachment_id)
+                                                <button
+                                                    class="btn btn-danger mx-2 d-grid w-100"
+                                                    wire:click.prevent="delete"
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="delete"
+                                                    type="submit">
+                                                    <span wire:loading.remove wire:target="delete">Delete</span>
+                                                    <span wire:loading wire:target="delete">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        Deleting ...
+                                                    </span>
+                                                </button>
+                                                @endif
+                                                <button
+                                                    class="btn btn-primary d-grid w-100"
+                                                    wire:click.prevent="process"
+
+                                                    wire:loading.attr="disabled"
+                                                    wire:target="file"
+
+
+
+                                                    type="submit">
+                                                    <span wire:loading.remove wire:target="process">Submit</span>
+                                                    <span wire:loading wire:target="process">
+                                                        <span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>
+                                                        Submitting form ...
+                                                    </span>
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
                         </form>
                     </div>
                     @elseif($action == ACTION_VIEW)

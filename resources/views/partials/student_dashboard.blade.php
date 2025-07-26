@@ -143,3 +143,69 @@
         </div>
     </div>
 </div>
+
+
+
+<div class="col-sm-6 col-xl-12  mb-3" wire:ignore>
+    <div class="card">
+        <div class="card-body">
+
+
+            <figure class="highcharts-figure">
+                <div id="bar_2"></div>
+                <!-- <p class="highcharts-description">
+                    Basic line chart showing trends in a dataset. This chart includes the
+                    <code>series-label</code> module, which adds a label to each line for
+                    enhanced readability.
+                </p> -->
+            </figure>
+
+            <script>
+                $.get('/get_pie_2', function(sqlResults) {
+                    console.log(sqlResults);
+
+                    var chartData = [{
+                            name: 'Auditory',
+                            y: parseFloat(sqlResults[0].a)
+                        },
+                        {
+                            name: 'Kinesthetics',
+                            y: parseFloat(sqlResults[0].k)
+                        },
+                        {
+                            name: 'Reading and Writing',
+                            y: parseFloat(sqlResults[0].r)
+                        },
+                        {
+                            name: 'Visual',
+                            y: parseFloat(sqlResults[0].v)
+                        }
+                    ];
+
+                    // Extract categories from data names (optional)
+                    var xAxisCategories = chartData.map(item => item.name);
+
+                    createColumnChart({
+                        containerId: 'bar_2',
+                        chartType: 'bar', // Changed from 'column' to 'bar' for horizontal bars
+                        titleText: 'Score Initial Assessment',
+                        subtitleText: 'Source: system',
+                        xAxisCategories: xAxisCategories,
+                        xAxisAccessibilityDescription: 'Learning Styles',
+                        yAxisMin: 0,
+                        yAxisTitleText: 'Score',
+                        tooltipValueSuffix: '',
+                        columnPointPadding: 0.2,
+                        columnBorderWidth: 0,
+                        seriesData: [{
+                            name: 'Score',
+                            data: chartData.map(item => item.y)
+                        }]
+                    });
+
+
+                });
+            </script>
+        </div>
+    </div>
+</div>

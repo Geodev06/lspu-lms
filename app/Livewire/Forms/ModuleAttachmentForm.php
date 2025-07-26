@@ -105,15 +105,15 @@ class ModuleAttachmentForm extends Component
 
         switch ($this->category) {
             case F_PDF:
-                $rules['file'] = 'required|file|mimes:pdf|max:5120';
+                $rules['file'] = 'required|file|mimes:pdf|max:10120';
                 break;
 
             case F_AUDIO:
-                $rules['file'] = 'required|file|mimes:mp3,wav,ogg,m4a|max:8120';
+                $rules['file'] = 'required|file|mimes:mp3,wav,ogg,m4a|max:51200';
                 break;
 
             case F_VIDEO:
-                $rules['file'] = 'required|file|mimes:mp4,mov,avi,wmv,flv,mkv|max:10120';
+                $rules['file'] = 'required|file|mimes:mp4,mov,avi,wmv,flv,mkv|max:51200';
                 break;
 
             case F_IMAGE:

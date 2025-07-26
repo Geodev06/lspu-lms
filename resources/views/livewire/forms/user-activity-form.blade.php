@@ -104,11 +104,17 @@
                                  <div class="row mt-4">
                                      @forelse($item->choices as $choice)
                                      <div class="col-lg-3 mb-2">
+                                         @if($choice->image)
+                                         <img src="{{ asset('uploads/question_attachments/'. $choice->image) }}" alt="" class="mb-2 mx-5" srcset="" style="max-height: 100px; max-width: 100px;">
+                                         @endif
                                          <div class="form-check mx-5">
                                              <input wire:model="answers.{{$item->id}}" name="default-radio{{$item->id}}" class="form-check-input" type="radio" value="{{ $choice->key }}" id="defaultRadio1">
                                              <label class="form-check-label" for="defaultRadio1"> {{ $choice->choice }} </label>
+
                                          </div>
+
                                      </div>
+
                                      @empty
 
                                      @endforelse
@@ -118,7 +124,13 @@
                                  <div class="row mt-3">
                                      <div class="col-lg-12 mb-2 p-4">
                                          <textarea wire:model="answers.{{$item->id}}" class="form-control" placeholder="Enter your answer" aria-label="With textarea" style="height: 135px;"></textarea>
-
+                                         <label for="">or Insert image</label>
+                                         <div class="custom-file-upload mb-2">
+                                             <div wire:loading wire:target="answer_images.{{$item->id}}">
+                                                 <p class="text-success">File Getting ready to upload ... Please wait.</p>
+                                             </div>
+                                             <input class="form-control" type="file" wire:model="answer_images.{{$item->id}}" id="image_d" accept="image/*">
+                                         </div>
                                      </div>
                                  </div>
                                  @endif
@@ -133,8 +145,8 @@
 
                              @if($activity->ide_id)
                              <div wire:ignore>
-                                <h2 class="text-primary">{{ render_ide($activity->ide_id)->ide_name ?? '' }}</h2>
-                                {!! render_ide($activity->ide_id)->embed_code ?? '' !!}
+                                 <h2 class="text-primary">{{ render_ide($activity->ide_id)->ide_name ?? '' }}</h2>
+                                 {!! render_ide($activity->ide_id)->embed_code ?? '' !!}
                              </div>
                              @endif
 

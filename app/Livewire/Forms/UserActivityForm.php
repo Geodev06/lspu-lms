@@ -13,6 +13,8 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Livewire\Attributes\Title;
 use Livewire\Component;
+use Illuminate\Support\Str;
+use Livewire\WithFileUploads;
 
 class UserActivityForm extends Component
 {
@@ -27,7 +29,10 @@ class UserActivityForm extends Component
     public $questions = [];
 
     public $answers = [];
+    public $answer_images = [];
 
+
+    use WithFileUploads;
 
 
     public function mount($activity_id, $action)
@@ -47,6 +52,7 @@ class UserActivityForm extends Component
         $rules = [];
         foreach ($this->questions as $question) {
             $rules["answers.{$question->id}"] = 'required';
+            $rules["answer_images.{$question->id}"] = 'nullable|image|max:11204';
         }
         $messages = [];
         foreach ($this->questions as $question) {
@@ -86,14 +92,32 @@ class UserActivityForm extends Component
                 foreach ($this->answers as $key => $value) {
                     $question = SetupActivityQuestion::find($key);
                     $total_possible_points += $question->points;
+
+                    $filename = null;
+
+
+                    if (
+                        $this->activity->type != MULTIPLE_CHOICE
+                        and
+                        isset($this->answer_images[$key])
+                        and
+                        $this->answer_images[$key] instanceof \Illuminate\Http\UploadedFile
+                    ) {
+                        if ($this->answer_images[$key] instanceof \Illuminate\Http\UploadedFile) {
+                            $extension = $this->answer_images[$key]->getClientOriginalExtension();
+                            $filename  = Str::random(20) . '.' . $extension;
+                            $this->answer_images[$key]->storeAs('answer_files', $filename, 'public_path');
+                        }
+                    }
+
                     $data = [
                         'activity_submission_id' => $activity_submitted->id,
                         'question' => $question->question,
                         'answer' => $this->answers[$key],
                         'points' => $this->answers[$key] == $question->answer ? $question->points : 0,
                         'max_points' => $question->points,
-                        'correct_answer' => $question->answer
-
+                        'correct_answer' => $question->answer,
+                        'image'          => $filename ?? null
                     ];
 
                     $total_points += $this->answers[$key] == $question->answer ? $question->points : 0;
@@ -109,8 +133,6 @@ class UserActivityForm extends Component
                     ]
                 );
             }
-
-
 
 
             if (in_array($this->activity->type, [MULTIPLE_CHOICE, IDENTIFICATION])) {
