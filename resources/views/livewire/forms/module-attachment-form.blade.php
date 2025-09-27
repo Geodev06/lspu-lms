@@ -80,7 +80,7 @@
                                         <label for="" class="form-label text-danger form-error">{{ $message }}</label>
                                         @enderror
                                     </div>
-                                    <select wire:model="category" id="defaultSelect" class="form-select">
+                                    <select wire:model.live="category" id="defaultSelect" class="form-select">
                                         <option value="PDF">PDF</option>
                                         <option value="VIDEO">VIDEO</option>
                                         <option value="AUDIO">AUDIO</option>

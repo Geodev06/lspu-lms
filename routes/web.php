@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\DatatableController;
 use App\Http\Controllers\EmailController;
+use App\Http\Controllers\EngagementController;
 use App\Http\Controllers\HighChartController;
 use App\Livewire\Auth\ForgotPassword;
 use App\Livewire\Auth\Login;
@@ -24,14 +25,14 @@ use App\Livewire\Pages\ManageLearningCourses;
 use App\Livewire\Pages\NotificationPage;
 use App\Livewire\Pages\Organizations;
 use App\Livewire\Pages\Sections;
-use App\Livewire\Pages\Survey;
 use App\Livewire\Pages\Survey2;
 use App\Livewire\Pages\UserActivity;
 use App\Livewire\Pages\UserActivityResponse;
 use App\Livewire\Pages\UserCourses;
 use App\Livewire\Pages\Users;
-use App\Livewire\Pages\VerificationNotice;
 use App\Livewire\Pages\ViewCourse;
+use App\Livewire\ViewCourseFiles;
+use App\Livewire\ViewFile;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Route;
 
@@ -53,7 +54,6 @@ Route::prefix('/')->group(function () {
     Route::get('fogot_password', ForgotPassword::class)->name('forgot_password');
 
     Route::get('/reset-password/{token}', ResetPasword::class)->name('password.reset');
-
 })->middleware('guest');
 
 Route::middleware(['auth', 'cfs'])->group(function () {
@@ -63,6 +63,8 @@ Route::middleware(['auth', 'cfs'])->group(function () {
     Route::get('/courses/view/{id}', ViewCourse::class)->name('user_view_course');
     Route::get('/courses/activity', UserActivity::class)->name('user_activity');
 
+    Route::get('/courses/view/files/{id}/{module_id}', ViewCourseFiles::class)->name('user_view_course_files');
+    Route::get('/courses/view/file/open/{id}/{module_id}/{file_id}', ViewFile::class)->name('user_view_course_files_open');
 
 
     // System admin and teacher
@@ -79,6 +81,7 @@ Route::middleware(['auth', 'cfs'])->group(function () {
 
 
 
+    Route::post('/save-engagement ', [EngagementController::class, 'save_engagement'])->name('save_engagement');
 
 
     // System admin
@@ -133,12 +136,11 @@ Route::controller(DatatableController::class)
 
         Route::get('/table_course_activities/{course_id}', 'table_course_activities')->name('course_activities');
         Route::get('/table_course_activities_all', 'table_course_activities_all')->name('course_activities_all');
-        
+
 
         Route::get('/table_notifications', 'table_notifications')->name('notifications');
 
         Route::get('/table_pending_tasks', 'table_pending_tasks')->name('table_pending_tasks');
-
     });
 
 Route::controller(HighChartController::class)

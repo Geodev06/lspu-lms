@@ -88,6 +88,7 @@ class ModuleAttachmentForm extends Component
         }
     }
 
+    
 
     public function process()
     {
