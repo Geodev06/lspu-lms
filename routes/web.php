@@ -174,3 +174,6 @@ Route::controller(EmailController::class)->middleware('auth')->group(function ()
         ->middleware('throttle:3,1')
         ->name('verification.send');
 });
+
+
+

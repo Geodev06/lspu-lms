@@ -40,7 +40,6 @@
         </div>
     </div>
 </div>
-
 <div class="col-sm-6 col-xl-3  mb-3">
     <div class="card">
         <div class="card-body">
@@ -64,7 +63,6 @@
     </div>
 </div>
 
-
 <div class="col-sm-6 col-xl-3  mb-3">
     <div class="card">
         <div class="card-body">
@@ -87,10 +85,30 @@
     </div>
 </div>
 
+<div class="col-sm-12 col-xl-12  mb-3">
+    <div class="card">
+        <div class="card-body">
+            <div class="d-flex align-items-start justify-content-between">
+                <div class="content-left">
+                    <span class="text-heading">Student Total spent time on uploaded files</span>
+                    <div class="d-flex align-items-center my-1">
+                        <p class="mb-0 me-2">{{ get_total_engagement_time($data['student_engagement'][0]->total_time ?? 0) }}</p>
+                    </div>
+                </div>
+                <div class="avatar">
+                    <span class="avatar-initial rounded bg-label-primary">
+                        <i class="icon-base bx bx-time icon-lg"></i>
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 <div class="col-sm-12 col-xl-12  mb-3" wire:ignore>
     <div class="card">
         <div class="card-body">
-            <div class="card-header">My Pending Tasks</div>
+            <div class="h5">My Pending Tasks</div>
             <div class="table-responsive text-nowrap">
                 <table class="table" id="table_pending_tasks">
                     <thead>
@@ -165,6 +183,7 @@
 
                     const gradesFloat = sqlResults.map(item => parseFloat(item.grade) || 0);
 
+                    console.log(gradesFloat)
                     createColumnChart({
                         containerId: 't_bar_1',
                         chartType: 'column',

@@ -26,7 +26,10 @@ class SetupActivitForm extends Component
 
     public string $search = '';
     public string $date = '';
+    public string $section = '';
     public string $score = '';
+
+    public $page = 1;
 
     public $id;
     public $action;
@@ -198,58 +201,64 @@ class SetupActivitForm extends Component
 
     public function render()
     {
-        // Step 1: Run raw JOIN query
-        $rawData = DB::table('user_activity_submissions as A')
+        $query = DB::table('user_activity_submissions as A')
             ->join('users as B', 'B.id', '=', 'A.created_by')
+            ->join('param_sections as C', 'C.id', '=', 'B.section_id')
             ->select(
                 'A.*',
                 'B.first_name',
                 'B.middle_name',
+                'C.section_name',
                 'B.last_name'
             )
             ->where('activity_id', $this->id)
-            ->orderByDesc('A.created_at')
-            ->get();
+            ->orderByDesc('A.created_at');
 
-        // Step 2: Decrypt full name
-        $submissions = $rawData->map(function ($item) {
+        if ($this->date) {
+            $query->whereDate('A.created_at', $this->date);
+        }
+
+        if ($this->section) {
+            $query->where('C.section_name', 'like', '%' . $this->section . '%');
+        }
+
+        if ($this->score !== '') {
+            $query->where('A.grade', $this->score);
+        }
+
+        if ($this->search) {
+            // Unfortunately, you can't search decrypted fields in DB directly.
+            // So you'll need to keep this search after pagination if you must decrypt names
+            // We'll do it after paginating
+        }
+
+        $perPage = 10;
+        $paginated = $query->paginate($perPage);
+
+        // Now decrypt the names AFTER pagination
+        $paginated->getCollection()->transform(function ($item) {
             $item->full_name = decrypt($item->first_name) . ' ' .
                 decrypt($item->middle_name) . ' ' .
                 decrypt($item->last_name);
             return $item;
         });
 
-        // Step 3: Apply filters in PHP
+        // Optionally filter by search (note: after decrypting, so it's in-memory)
         if ($this->search) {
-            $submissions = $submissions->filter(function ($item) {
+            $filtered = $paginated->getCollection()->filter(function ($item) {
                 return str_contains(strtolower($item->full_name), strtolower($this->search));
             });
+
+            // Re-paginate the filtered results
+            $paginated = new LengthAwarePaginator(
+                $filtered->forPage($this->page, $perPage),
+                $filtered->count(),
+                $perPage,
+                $this->page,
+                ['path' => request()->url(), 'query' => request()->query()]
+            );
         }
 
-        if ($this->date) {
-            $submissions = $submissions->filter(function ($item) {
-                return \Carbon\Carbon::parse($item->created_at)->toDateString() === $this->date;
-            });
-        }
-
-        if ($this->score !== '') {
-            $submissions = $submissions->filter(function ($item) {
-                return $item->grade == $this->score;
-            });
-        }
-
-        // Step 4: Manual pagination (10 per page)
-        $page = request()->get('page', 1);
-        $perPage = 10;
-        $paginated = new LengthAwarePaginator(
-            $submissions->forPage($page, $perPage),
-            $submissions->count(),
-            $perPage,
-            $page,
-            ['path' => request()->url(), 'query' => request()->query()]
-        );
-
-        // Step 5: Return to view
         return view('livewire.forms.setup-activit-form', [
             'submissions' => $paginated,
         ]);

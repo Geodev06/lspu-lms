@@ -290,11 +290,17 @@
                                         </div>
                                         @endswitch
 
+
                                     </div>
 
                                     <div class="col-lg-12 mb-2">
                                         <p class="m-0">Date Uploaded</p>
                                         <b>{{ $record->created_at }}</b>
+                                    </div>
+
+                                    <div class="col-lg-12 mb-2">
+                                        <p class="m-0">Alltime Total Student View Spent Time</p>
+                                        <b>{{ get_total_engagement_time($spent_time ?? 0) }}</b>
                                     </div>
 
 

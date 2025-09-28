@@ -78,7 +78,7 @@
                                      @if($action == ACTION_EDIT AND $submission->checked_flag == 0 )
 
                                      <div class="mb-3">
-                                         @if($submission->activity_type == 'I')
+                                         @if($submission->activity_type == 'I' OR $submission->activity_type == 'HO')
                                          <div class="d-flex">
                                              <b class="text-dark">{{ $item->points }}</b>
                                              @if($item->points != 0)

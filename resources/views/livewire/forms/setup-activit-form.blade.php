@@ -279,6 +279,7 @@
                                         <thead>
                                             <tr>
                                                 <th>Student Name</th>
+                                                <th>Student Section</th>
                                                 <th>Score</th>
                                                 <th>Date</th>
                                                 <th>Action</th>
@@ -286,8 +287,8 @@
                                             </tr>
                                             <tr>
                                                 <td> <input type="text" wire:model.live.debounce.500ms="search" class="form-control" placeholder="Search by name"></td>
+                                                <td> <input type="text" wire:model.live.debounce.500ms="section" class="form-control" placeholder="Search by Section"></td>
                                                 <td><input type="text" wire:model.live.debounce.500ms="score" class="form-control" placeholder="Search by Score"></td>
-                                                <td><input type="text" wire:model.live.debounce.500ms="date" class="form-control" placeholder="Search by Date"></td>
                                                 <td></td>
                                             </tr>
                                         </thead>
@@ -297,6 +298,9 @@
 
                                                 <td>
                                                     {{ get_user_fullname($item->created_by)}}
+                                                </td>
+                                                <td>
+                                                    {{ $item->section_name }}
                                                 </td>
                                                 <td>
                                                     {{ $item->grade }} %

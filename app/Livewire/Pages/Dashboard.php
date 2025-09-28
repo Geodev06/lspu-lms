@@ -70,9 +70,19 @@ class Dashboard extends Component
                         ->where('B.created_by', $user_id)
                         ->orderByDesc('user_activity_submissions.created_at')
                         ->select('user_activity_submissions.*')
-                        ->paginate(10)
+                        ->paginate(10),
+                    'student_engagement' => DB::select("
+                        SELECT
+                            SUM(total_time) total_time
+                            FROM engagements A
+                            LEFT JOIN param_module_attachments B ON B.id = A.file_id
+                            LEFT JOIN param_learning_course_modules C ON C.id = B.module_id
+                            LEFT JOIN param_learning_courses D on D.id = C.learning_course_id
+                            where  D.created_by = ?
+                    ", [Auth::user()->id])
                 ];
 
+               
                 break;
 
             case ROLE_STUDENT:

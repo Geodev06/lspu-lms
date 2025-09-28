@@ -2,6 +2,7 @@
 
 namespace App\Livewire\Forms;
 
+use App\Models\EngagementModel;
 use App\Models\ParamLearningCourse;
 use App\Models\ParamModuleAttachment;
 use Exception;
@@ -39,6 +40,8 @@ class ModuleAttachmentForm extends Component
 
     public $file;
     public $category;
+    public $spent_time;
+
 
 
 
@@ -82,13 +85,16 @@ class ModuleAttachmentForm extends Component
             $this->file = $this->record->file;
             $this->category = $this->record->category;
             $this->kinesthetic = $this->record->k_flag;
+
+            $this->spent_time = EngagementModel::where('file_id', decrypt($attachment_id))->sum('total_time');
+
         } else {
 
             $this->category = F_PDF;
         }
     }
 
-    
+
 
     public function process()
     {
@@ -213,6 +219,7 @@ class ModuleAttachmentForm extends Component
 
     public function render()
     {
+
         return view('livewire.forms.module-attachment-form');
     }
 }
