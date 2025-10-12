@@ -78,7 +78,7 @@
                                      @if($action == ACTION_EDIT AND $submission->checked_flag == 0 )
 
                                      <div class="mb-3">
-                                         @if($submission->activity_type == 'I' OR $submission->activity_type == 'HO')
+                                         @if($submission->activity_type == 'I' OR $submission->activity_type == 'HO' OR $submission->activity_type == 'E')
                                          <div class="d-flex">
                                              <b class="text-dark">{{ $item->points }}</b>
                                              @if($item->points != 0)
@@ -90,7 +90,7 @@
                                          @error("answers.{$item->id}")
                                          <div class="text-danger mb-2" style="font-size: 12px;">{{ $message }}</div>
                                          @enderror
-                                         <input type="text" wire:model="answers.{{$item->id}}" class="form-control" name="answers.{{$item->id}}" value="{{ $item->points }}" placeholder="Enter your points" autofocus="true">
+                                         <input type="text" wire:model="answers.{{$item->id}}" class="form-control" name="answers.{{$item->id}}" value="" placeholder="Enter your points" autofocus="true">
                                      </div>
 
 
@@ -109,7 +109,10 @@
                                      @endif
                                  </div>
                                  <div class="bg-dark p-4 text-white" style="border-radius: 20px;">
-                                     {{ $item->answer }}
+
+                                     <pre>
+                                        {{ $item->answer }}
+                                     </pre>
 
                                      @if($item->image)
                                      <br>
@@ -120,6 +123,13 @@
 
                              </div>
                              @endforeach
+
+                             @if($activity->ide_id)
+                             <div wire:ignore>
+                                 <h2 class="text-primary">{{ render_ide($activity->ide_id)->ide_name ?? '' }}</h2>
+                                 {!! render_ide($activity->ide_id)->embed_code ?? '' !!}
+                             </div>
+                             @endif
 
                              <div class="col-lg-10">
 

@@ -33,7 +33,16 @@ class UserActivityResponse extends Component
         $this->submission = UserActivitySubmission::find($this->submission_id);
         $this->submission_details = UserActivitySubmissionDetail::where('activity_submission_id', $this->submission_id)->get();
 
+        if ($this->submission_details) {
+            foreach ($this->submission_details as $key => $value) {
+
+                $this->answers[$value->id] = $value->points;
+            }
+        }
+
         $this->activity = SetupActivity::find($this->submission->activity_id);
+
+
     }
 
     public function submit()
