@@ -110,9 +110,13 @@
                                  </div>
                                  <div class="bg-dark p-4 text-white" style="border-radius: 20px;">
 
+                                     @if($submission->activity_type != 'HO')
+                                     {!! $item->answer !!}
+                                     @else
                                      <pre>
-                                        {{ $item->answer }}
-                                     </pre>
+                                            {!! $item->answer !!}
+                                        </pre>
+                                     @endif
 
                                      @if($item->image)
                                      <br>

@@ -767,6 +767,7 @@ class DatatableController extends Controller
                     LEFT JOIN param_sections  D ON D.id = B.section_id
                     WHERE A.activity_type != 'MC'
                     AND C.created_by = ?
+                    AND A.checked_flag = 0
                 ", [$user->id]);
 
                 return DataTables::of($query)

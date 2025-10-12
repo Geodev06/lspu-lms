@@ -309,7 +309,7 @@
                                                     {{ \Carbon\Carbon::parse($item->created_at) }}
                                                 </td>
                                                 <td>
-                                                    <a href="{{ route('user_activity_response', ['submission_id'=> encrypt($item->id), 'action' => encrypt(ACTION_VIEW)]) }}">View</a>
+                                                    <a href="{{ route('user_activity_response', ['submission_id'=> encrypt($item->id), 'action' => encrypt(ACTION_EDIT)]) }}">View</a>
                                                 </td>
 
 
